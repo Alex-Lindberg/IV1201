@@ -8,7 +8,7 @@ module.exports = {
     title: 'IV1201 - API',
     description: 'IV1201 - API',
     contact: {
-      name: 'IV1201 - API',
+      name: 'denhad@kth.se',
     },
   },
   servers: [

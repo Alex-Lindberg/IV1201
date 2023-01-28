@@ -8,7 +8,7 @@ const routes = require('./routes');
 const app = express();
 const db = require('./utils/db');
 
-db.connect();
+// db.connect();
 
 const port = process.env.PORT || 3001;
 
