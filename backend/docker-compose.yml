@@ -1,0 +1,28 @@
+#docker file for nodejs and postgresql
+services:
+  backend:
+    image: node:latest
+    container_name: IV1201_backend
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: npm start
+    ports:
+      - '3001:3001'
+    restart: always
+    depends_on:
+      - database
+  database:
+    image: postgres:15-alpine
+    container_name: IV1201_postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: IV1201
+
+volumes:
+  pgdata:
