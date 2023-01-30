@@ -17,10 +17,10 @@ const sendQuery = async (query) => {
 };
 
 const connect = async () => {
-  console.log('🚀 ~ file: db.js:9 ~ process.env.POSTGRES_USER', process.env.POSTGRES_USER);
-  console.log('🚀 ~ file: db.js:9 ~ process.env.POSTGRES_PASSWORD', process.env.POSTGRES_PASSWORD);
-  console.log('🚀 ~ file: db.js:9 ~ process.env.POSTGRES_DB', process.env.POSTGRES_DB);
-  console.log('🚀 ~ file: db.js:9 ~ process.env.POSTGRES_PORT', process.env.POSTGRES_PORT);
+  console.log(`🚮 | file: db.js:26 | connect | process.env.POSTGRES_DB`, process.env.POSTGRES_DB);
+  console.log(`🚮 | file: db.js:26 | connect | process.env.POSTGRES_PASSWORD`, process.env.POSTGRES_PASSWORD);
+  console.log(`🚮 | file: db.js:26 | connect | process.env.POSTGRES_USER`, process.env.POSTGRES_USER);
+  console.log(`🚮 | file: db.js:24 | connect | process.env.POSTGRES_PORT`, process.env.POSTGRES_PORT);
   return await client.connect();
 };
 
