@@ -1,10 +1,6 @@
 const { Pool } = require("pg");
 const client = new Pool({
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  host: "0.0.0.0",
-  database: process.env.POSTGRES_DB || "postgres",
-  port: process.env.POSTGRES_PORT || 5432,
+  connectionString: process.env.DATABASE_URL,
 });
 
 const sendQuery = async (query) => {
@@ -16,26 +12,8 @@ const sendQuery = async (query) => {
 };
 
 const connect = async () => {
-  console.log(
-    `🚮 | file: db.js:26 | connect | process.env.POSTGRES_DB`,
-    process.env.POSTGRES_DB
-  );
-  console.log(
-    `🚮 | file: db.js:26 | connect | process.env.POSTGRES_PASSWORD`,
-    process.env.POSTGRES_PASSWORD
-  );
-  console.log(
-    `🚮 | file: db.js:26 | connect | process.env.POSTGRES_USER`,
-    process.env.POSTGRES_USER
-  );
-  console.log(
-    `🚮 | file: db.js:24 | connect | process.env.POSTGRES_PORT`,
-    process.env.POSTGRES_PORT
-  );
-  console.log(
-    `🚮 | file: db.js:23 | connect | process.env.BACKEND_PORT`,
-    process.env.BACKEND_PORT
-  );
+  console.log(`DATABASE_URL`, process.env.DATABASE_URL);
+  console.log("POSTGRES_DB", process.env.POSTGRES_DB);
   return await client.connect();
 };
 
