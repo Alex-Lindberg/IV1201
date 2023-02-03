@@ -1,20 +1,45 @@
-const { Pool } = require("pg");
-const client = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const { Pool } = require('pg');
+const fs = require('fs');
 
-const sendQuery = async (query) => {
-  try {
-    return await client.query(query);
-  } catch (error) {
-    throw error;
-  }
+const client = new Pool({
+	connectionString: process.env.DATABASE_URL,
+});
+const dbCreator = fs
+	.readFileSync('utils/dbIntegration/sqlScripts/old-database.sql')
+	.toString();
+
+const createDatabase = async () => {
+	try {
+		await client.query('BEGIN');
+		await client.query(dbCreator);
+		await client.query('COMMIT');
+	} catch (error) {
+		await client.query('ROLLBACK');
+		throw error;
+	}
 };
 
 const connect = async () => {
-  console.log(`DATABASE_URL`, process.env.DATABASE_URL);
-  console.log("POSTGRES_DB", process.env.POSTGRES_DB);
-  return await client.connect();
+	client.connect();
 };
+
+const sendQuery = async (query) => {
+	try {
+		return await client.query(query);
+	} catch (error) {
+		throw error;
+	}
+};
+
+// check if database "IV1012" exists, if it doesn't, create it
+sendQuery(`SELECT * FROM pg_database WHERE datname = 'iv1201'`)
+	.then((res) => {
+		if (res.rowCount === 0) {
+			createDatabase();
+		}
+	})
+	.catch((error) => {
+		console.log(error);
+	});
 
 module.exports = { sendQuery, connect };
