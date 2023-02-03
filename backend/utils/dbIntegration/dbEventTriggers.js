@@ -39,7 +39,7 @@ const triggers = () => {
     FOR EACH ROW EXECUTE FUNCTION log_changes();
 
     CREATE TRIGGER log_changes_trigger_competence_profile
-    AFTER INSERT OR UPDATE OR DELETE ON role
+    AFTER INSERT OR UPDATE OR DELETE ON competence_profile
     FOR EACH ROW EXECUTE FUNCTION log_changes();
     `;
 
