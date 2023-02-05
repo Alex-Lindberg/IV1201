@@ -26,10 +26,10 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.availability (
-    availability_id integer NOT NULL,
-    person_id integer,
-    from_date date,
-    to_date date
+                                     availability_id integer NOT NULL,
+                                     person_id integer,
+                                     from_date date,
+                                     to_date date
 );
 
 
@@ -46,7 +46,7 @@ ALTER TABLE public.availability ALTER COLUMN availability_id ADD GENERATED ALWAY
     NO MINVALUE
     NO MAXVALUE
     CACHE 1
-);
+    );
 
 
 --
@@ -54,8 +54,8 @@ ALTER TABLE public.availability ALTER COLUMN availability_id ADD GENERATED ALWAY
 --
 
 CREATE TABLE public.competence (
-    competence_id integer NOT NULL,
-    name character varying(255)
+                                   competence_id integer NOT NULL,
+                                   name character varying(255)
 );
 
 
@@ -72,7 +72,7 @@ ALTER TABLE public.competence ALTER COLUMN competence_id ADD GENERATED ALWAYS AS
     NO MINVALUE
     NO MAXVALUE
     CACHE 1
-);
+    );
 
 
 --
@@ -80,10 +80,10 @@ ALTER TABLE public.competence ALTER COLUMN competence_id ADD GENERATED ALWAYS AS
 --
 
 CREATE TABLE public.competence_profile (
-    competence_profile_id integer NOT NULL,
-    person_id integer,
-    competence_id integer,
-    years_of_experience numeric(4,2)
+                                           competence_profile_id integer NOT NULL,
+                                           person_id integer,
+                                           competence_id integer,
+                                           years_of_experience numeric(4,2)
 );
 
 
@@ -100,7 +100,7 @@ ALTER TABLE public.competence_profile ALTER COLUMN competence_profile_id ADD GEN
     NO MINVALUE
     NO MAXVALUE
     CACHE 1
-);
+    );
 
 
 --
@@ -108,14 +108,14 @@ ALTER TABLE public.competence_profile ALTER COLUMN competence_profile_id ADD GEN
 --
 
 CREATE TABLE public.person (
-    person_id integer NOT NULL,
-    name character varying(255),
-    surname character varying(255),
-    pnr character varying(255),
-    email character varying(255),
-    password character varying(255),
-    role_id integer,
-    username character varying(255)
+                               person_id integer NOT NULL,
+                               name character varying(255),
+                               surname character varying(255),
+                               pnr character varying(255),
+                               email character varying(255),
+                               password character varying(255),
+                               role_id integer,
+                               username character varying(255)
 );
 
 
@@ -132,7 +132,7 @@ ALTER TABLE public.person ALTER COLUMN person_id ADD GENERATED ALWAYS AS IDENTIT
     NO MINVALUE
     NO MAXVALUE
     CACHE 1
-);
+    );
 
 
 --
@@ -140,8 +140,8 @@ ALTER TABLE public.person ALTER COLUMN person_id ADD GENERATED ALWAYS AS IDENTIT
 --
 
 CREATE TABLE public.role (
-    role_id integer NOT NULL,
-    name character varying(255)
+                             role_id integer NOT NULL,
+                             name character varying(255)
 );
 
 
@@ -158,7 +158,7 @@ ALTER TABLE public.role ALTER COLUMN role_id ADD GENERATED ALWAYS AS IDENTITY (
     NO MINVALUE
     NO MAXVALUE
     CACHE 1
-);
+    );
 
 
 --
