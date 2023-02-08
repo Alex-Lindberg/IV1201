@@ -1,13 +1,35 @@
 module.exports = {
-	TestData: {
+	ErrorCode: {
 		type: 'object',
 		additionalProperties: false,
-		required: ['data'],
+		required: ['statusCode', 'error', 'method', 'path', 'message'],
 		properties: {
-			data: {
-				type: 'string',
-				example: 'This is a test string',
+			statusCode: {
+				type: 'integer',
+				example: 400,
 			},
+			error: {
+				type: 'string',
+				example: 'Invalid value',
+			},
+			method: {
+				type: 'string',
+				example: 'GET',
+			},
+			path: {
+				type: 'string',
+				example: '/api/applicants',
+			},
+			message: {
+				type: 'string',
+				example: 'Invalid value',
+			},
+		},
+	},
+	ListOfErrorCodes: {
+		type: 'array',
+		items: {
+			$ref: '#/components/schemas/ErrorCode',
 		},
 	},
 	PersonalNumber: {

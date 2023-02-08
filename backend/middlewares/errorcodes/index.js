@@ -4,15 +4,26 @@ const Boom = require('@hapi/boom'),
 const boomErrorCodes = {
 	forbidden: function ({ req, message = 'Forbidden' }) {
 		return Boom.forbidden('', {
-			errorCode: 'forbidde.validation',
+			statusCode: 403,
+			error: 'Forbidden',
 			method: req.method,
 			path: req.url,
 			message: message,
 		});
 	},
+	// unathorized: function ({ req, message = 'Unathorized' }) {
+	// 	return Boom.unauthorized('Un-authenticated request', '', {
+	// 		statusCode: 401,
+	// 		error: 'Unathorized',
+	// 		method: req.method,
+	// 		path: req.url,
+	// 		message: message,
+	// 	});
+	// },
 	serverError: function ({ req, message = 'Server error' }) {
 		return Boom.badImplementation('', {
-			errorCode: 'forbidden.validation',
+			statusCode: 500,
+			errorCode: 'Server error',
 			method: req.method,
 			path: req.url,
 			message: message,
@@ -20,45 +31,36 @@ const boomErrorCodes = {
 	},
 	notFound: function ({ req, message = 'Not Found' }) {
 		return Boom.notFound('', {
-			errorCode: 'db.notFound',
+			statusCode: 404,
+			errorCode: 'Not found',
 			method: req.method,
 			path: req.url,
 			message: message,
 		});
 	},
-	sameValue: function ({ req, message = 'Same value' }) {
+	badRequest: function ({ req, message = 'Invalid value' }) {
 		return Boom.badRequest('', {
-			errorCode: 'db.sameValue',
+			statusCode: 400,
+			errorCode: 'Invalid value',
 			method: req.method,
 			path: req.url,
 			message: message,
 		});
 	},
-	invalidValue: function ({ req, message = 'Invalid value' }) {
-		return Boom.badRequest('', {
-			errorCode: 'db.invalidValue',
-			method: req.method,
-			path: req.url,
-			message: message,
-		});
-	},
-	badRequest: function ({ message }) {
-		return Boom.badRequest(message);
-	},
+};
+
+const sendErrorCodes = (req, res, next) => {
+	res.status(200).json(
+		_(boomErrorCodes)
+			.values()
+			.map((x) => {
+				return x({ req }).data;
+			})
+			.value()
+	);
 };
 
 module.exports = {
 	errorCodes: boomErrorCodes,
-	get: [
-		function (req, res, next) {
-			res.status(200).json(
-				_(boomErrorCodes)
-					.values()
-					.map((x) => {
-						return x({}).data;
-					})
-					.value()
-			);
-		},
-	],
+	sendErrorCodes,
 };
