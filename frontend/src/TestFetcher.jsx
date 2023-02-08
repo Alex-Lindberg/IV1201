@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 import { useQuery } from "react-query";
-import { fetchTestData } from "./api";
+import { fetchApplications, fetchTestData } from "./api";
 
 export default () => {
   const [nameToFetch, setNameToFetch] = useState("");
@@ -11,16 +11,18 @@ export default () => {
     console.log("nameToFetch :>> ", nameToFetch);
   };
 
-  const { isLoading, isError, data, error } = useQuery("test", fetchTestData);
+  // const test = useQuery("test", fetchTestData);
+  const test = useQuery("test2", fetchApplications);
+
 
   const TheData = () => {
-    if (isLoading) {
+    if (test.isLoading) {
       return <span>Loading...</span>;
     }
-    if (isError) {
-      return <span>Error: {error.message}</span>;
+    if (test.isError) {
+      return <span>Error: {test.error.message}</span>;
     }
-    return <span>{data?.testData ?? "No data"}</span>;
+    return <span>{test.data?.testData ?? "No data"}</span>;
   };
 
   return (
@@ -42,4 +44,3 @@ export default () => {
     </>
   );
 };
-
