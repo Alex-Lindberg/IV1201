@@ -1,9 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 
 import { useQuery } from "react-query";
+import { fetchTestData } from "./api";
 
 export default () => {
   const [nameToFetch, setNameToFetch] = useState("");
@@ -12,7 +11,7 @@ export default () => {
     console.log("nameToFetch :>> ", nameToFetch);
   };
 
-  const { isLoading, isError, data, error } = useQuery("test", fetchData);
+  const { isLoading, isError, data, error } = useQuery("test", fetchTestData);
 
   const TheData = () => {
     if (isLoading) {
@@ -44,15 +43,3 @@ export default () => {
   );
 };
 
-const fetchData = async () => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  return axios
-    .get(`http://localhost:3001/api/test`, config)
-    .then(({ data }) => {
-      return data;
-    })
-};
