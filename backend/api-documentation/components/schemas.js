@@ -10,7 +10,7 @@ module.exports = {
 			},
 		},
 	},
-	SocialSecurityNumber: {
+	PersonalNumber: {
 		type: 'string',
 		pattern: '^[0-9]{8}-[0-9]{4}$',
 		example: '19900101-1234',
@@ -42,7 +42,7 @@ module.exports = {
 				example: 'Doe',
 			},
 			pnr: {
-				$ref: '#/components/schemas/SocialSecurityNumber',
+				$ref: '#/components/schemas/PersonalNumber',
 			},
 			email: {
 				$ref: '#/components/schemas/Email',
