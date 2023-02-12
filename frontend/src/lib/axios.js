@@ -30,8 +30,9 @@ axios.interceptors.request.use(authRequestInterceptor, (err) => {
 axios.interceptors.response.use(
   (response) => response,
   (err) => {
-    // Axios stacktrace with async requests are very non-descriptive
+    // Delete async stacktrace
     if (err.stack) delete err.stack;
+    
     return Promise.reject({ ...err.toJSON(), requestUrl: err?.config?.url });
   }
 );

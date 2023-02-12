@@ -1,2 +1,2 @@
-export { fetchTestData, fetchApplications } from "./applications";
+export { fetchApplications } from "./applications";
 export { fetchUsers } from "./users";

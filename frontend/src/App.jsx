@@ -1,22 +1,14 @@
-
-import "./App.css";
-
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import TestFetcher from "./TestFetcher";
-import HomePage from "./pages/homePage";
-
-const queryClient = new QueryClient();
+import HomePage from './pages/HomePage';
+import { Navbar, Footer } from './components'
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <HomePage />
-      </div>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
+	return (
+		<div className='flex flex-col bg-slate-700 '>
+			<Navbar />
+			<HomePage />
+			<Footer />
+		</div>
+	);
 }
 
 export default App;
