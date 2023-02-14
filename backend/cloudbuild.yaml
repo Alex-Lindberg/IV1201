@@ -1,0 +1,20 @@
+steps:
+# Build the container image
+- name: 'eu.gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'eu.gcr.io/iv1201-377614/iv1201-backend', '.']
+
+# Push the container image to Container Registry
+- name: 'eu.gcr.io/cloud-builders/docker'
+  args: ['push', 'eu.gcr.io/iv1201-377614/iv1201-backend']
+
+# Deploy the container image to Cloud Run
+- name: 'eu.gcr.io/cloud-builders/gcloud'
+  args:
+    - 'run'
+    - 'deploy'
+    - 'iv1201-backend'
+    - '--image=eu.gcr.io/iv1201-377614/iv1201-backend'
+    - '--region=europe-west1'
+    - '--platform=managed'
+    - '--allow-unauthenticated'
+    - '--set-env-vars=POSTGRES_USER=postgres,POSTGRES_DB=postgres,POSTGRES_PASSWORD=sekqi6-dafbEq-xokhip,POSTGRES_PORT=5432,BACKEND_PORT=3001,POSTGRES_HOST=35.228.81.212'
