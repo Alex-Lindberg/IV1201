@@ -22,7 +22,7 @@ const HomePage = () => {
 		) : !test.data.pages ? (
 			<span>No applicants found </span>
 		) : (
-			<ul className='max-w-md'>
+			<ul className='max-w-lg'>
 				{test.data.pages.map((page, i) => {
 					return (
 						<Fragment key={i}>

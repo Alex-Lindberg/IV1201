@@ -34,6 +34,10 @@ const Searchbar = () => {
                         rounded-lg shadow w-44 dark:bg-gray-700'
 				>
 					{/* Items go here */}
+					<div>Test 1</div>
+					<div>Test 2</div>
+					<div>Test 3</div>
+					<div>Test 4</div>
 				</div>
 				<div className='relative w-full'>
 					<input
@@ -51,13 +55,13 @@ const Searchbar = () => {
 					/>
 					<span
 						className='
-                            absolute top-0 right-0 p-2.5 
-                            text-sm font-medium text-white 
+                            absolute top-0 right-0 p-5 
+                            text-sm font-medium text-white
                             border rounded-r-lg dark:border-gray-600
                             focus:ring-4 focus:outline-none dark:hover:bg-slate-600'
 					>
 						<SearchIcon />
-						<span className='sr-only'>Search</span>
+						{/* <span className='sr-only'>Search</span> */}
 					</span>
 				</div>
 			</div>
