@@ -4898,3 +4898,15 @@ ALTER TABLE ONLY public.person
 -- PostgreSQL database dump complete
 --
 
+create table public.sessions
+(
+    id              uuid not null
+        constraint sessions_pk
+            primary key,
+    person_id       integer
+        references public.person,
+    expiration_date timestamp
+);
+
+alter table public.sessions
+    owner to postgres;
