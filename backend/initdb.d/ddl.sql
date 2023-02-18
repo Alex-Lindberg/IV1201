@@ -4910,3 +4910,7 @@ create table public.sessions
 
 alter table public.sessions
     owner to postgres;
+
+
+CREATE EXTENSION pgcrypto;
+update public.person set password = crypt('password', gen_salt('bf')) where password IS NOT NULL;
