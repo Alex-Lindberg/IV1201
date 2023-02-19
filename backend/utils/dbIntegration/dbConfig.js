@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 let client;
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV === 'development') {
 	console.log('process.env.DATABASE_URL', process.env.DATABASE_URL);
 	client = new Pool({
 		connectionString: process.env.DATABASE_URL,
