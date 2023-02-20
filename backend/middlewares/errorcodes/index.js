@@ -11,15 +11,6 @@ const boomErrorCodes = {
 			message: message,
 		});
 	},
-	// unathorized: function ({ req, message = 'Unathorized' }) {
-	// 	return Boom.unauthorized('Un-authenticated request', '', {
-	// 		statusCode: 401,
-	// 		error: 'Unathorized',
-	// 		method: req.method,
-	// 		path: req.url,
-	// 		message: message,
-	// 	});
-	// },
 	serverError: function ({ req, message = 'Server error' }) {
 		return Boom.badImplementation('', {
 			statusCode: 500,
@@ -49,6 +40,13 @@ const boomErrorCodes = {
 	},
 };
 
+/**
+ * It takes the error codes from the `boomErrorCodes` object, creates a `Boom` error object for each
+ * one, and then returns the `data` property of each error object
+ * @param req - The request object
+ * @param res - The response object
+ * @param next - The next middleware in the chain.
+ */
 const sendErrorCodes = (req, res, next) => {
 	res.status(200).json(
 		_(boomErrorCodes)
