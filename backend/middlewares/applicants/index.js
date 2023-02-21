@@ -74,7 +74,7 @@ const getApplicant = async (req, res, next) => {
  */
 const getAvailabilityForApplicant = async (req, res, next) => {
 	const include = req.query.include;
-	if (!include.includes('availability')) {
+	if (!include || !include.includes('availability')) {
 		return next();
 	}
 	const applicantId = req.params.applicantId;
@@ -102,7 +102,7 @@ const getAvailabilityForApplicant = async (req, res, next) => {
  */
 const getCompetenceForApplicant = async (req, res, next) => {
 	const include = req.query.include;
-	if (!include.includes('competence')) {
+	if (!include || !include.includes('competence')) {
 		return next();
 	}
 	const applicantId = req.params.applicantId;
