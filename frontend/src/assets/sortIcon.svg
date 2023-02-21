@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" 
+  aria-hidden='true'
+  fill='none'
+  viewBox='0 0 20 20'
+  stroke-width="1.5" 
+  stroke="currentColor" 
+  className='w-4 h-4 ml-1'>
+  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+</svg>

@@ -1,22 +1,14 @@
-
-import "./App.css";
-
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import TestFetcher from "./TestFetcher";
-import HomePage from "./pages/homePage";
-
-const queryClient = new QueryClient();
+import ApplicantsPage from './pages/ApplicantsPage';
+import { Navbar, Footer } from './components';
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <HomePage />
-      </div>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
+	return (
+		<div className=' bg-primary-500 text-tc-500 '>
+			<Navbar />
+			<ApplicantsPage />
+			<Footer />
+		</div>
+	);
 }
 
 export default App;
