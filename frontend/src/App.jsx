@@ -1,11 +1,11 @@
-import HomePage from './pages/HomePage';
-import { Navbar, Footer } from './components'
+import ApplicantsPage from './pages/ApplicantsPage';
+import { Navbar, Footer } from './components';
 
 function App() {
 	return (
-		<div className='flex flex-col bg-slate-700 '>
+		<div className=' bg-primary-500 text-tc-500 '>
 			<Navbar />
-			<HomePage />
+			<ApplicantsPage />
 			<Footer />
 		</div>
 	);

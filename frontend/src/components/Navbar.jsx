@@ -2,8 +2,10 @@ import Searchbar from './Searchbar';
 
 const Navbar = () => {
 	return (
-		<div className='sticky bg-white top-0 p-5 w-screen z-20'>
-			<h1 id='nav-header'>IV1201</h1>
+		<div className='fixed bg-primary-700 top-0 
+			md:px-5 md:py-10
+			pt-5 w-screen z-20'>
+			<h1 className='text-center' id='nav-header'>IV1201</h1>
 		</div>
 	);
 };

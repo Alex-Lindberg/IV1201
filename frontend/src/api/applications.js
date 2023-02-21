@@ -9,3 +9,12 @@ export const fetchApplications = async () => {
     })
     .catch(console.error);
 };
+
+export const fetchApplication = async () => {
+  return api
+    .get(`${API_URL}/api/applicant`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch(console.error);
+};
