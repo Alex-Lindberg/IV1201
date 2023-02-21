@@ -47,6 +47,46 @@ module.exports = {
 		format: 'email',
 		example: 'denhad@kth.se',
 	},
+	Competence: {
+		type: 'object',
+		additionalProperties: false,
+		required: ['competence_id', 'name', 'years_of_experience'],
+		properties: {
+			competence_id: {
+				$ref: '#/components/schemas/GenericId',
+			},
+			name: {
+				type: 'string',
+				example: 'Java',
+			},
+			years_of_experience: {
+				type: 'number',
+				format: 'float',
+				example: 3.5,
+			},
+		},
+	},
+	GenericDate: {
+		type: 'string',
+		format: 'date',
+		example: '2020-01-01',
+	},
+	Availability: {
+		type: 'object',
+		additionalProperties: false,
+		required: ['availability_id', 'from_date', 'to_date'],
+		properties: {
+			availability_id: {
+				$ref: '#/components/schemas/GenericId',
+			},
+			from_date: {
+				$ref: '#/components/schemas/GenericDate',
+			},
+			to_date: {
+				$ref: '#/components/schemas/GenericDate',
+			},
+		},
+	},
 	Applicant: {
 		type: 'object',
 		additionalProperties: false,
@@ -73,6 +113,12 @@ module.exports = {
 				type: 'string',
 				example: 'johndoe',
 				nullable: true,
+			},
+			competence: {
+				$ref: '#/components/schemas/Competence',
+			},
+			availability: {
+				$ref: '#/components/schemas/Availability',
 			},
 		},
 	},
