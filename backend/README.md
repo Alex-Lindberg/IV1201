@@ -5,6 +5,6 @@
   License: MIT
 - To install the dependencies:
   - npm install
-- To run the server:
+- To run the server in development mode:
   - npm install 
   - docker-compose up -d
