@@ -32,5 +32,8 @@ module.exports.get.apiDoc = {
 		{
 			$ref: '#/components/parameters/includeParameter',
 		},
+		{
+			$ref: '#/components/parameters/applicantId',
+		},
 	],
 };
