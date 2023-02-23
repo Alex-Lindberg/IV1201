@@ -50,9 +50,16 @@ const getAllApplicants = async (req, res, next) => {
 const getApplicant = async (req, res, next) => {
 	const applicantId = req.params.applicantId;
 	try {
-		res.locals.outData.applicant = await applicantsDAO.getApplicant(
-			applicantId
-		);
+		const result = await applicantsDAO.getApplicant(applicantId);
+		if (result.length === 0) {
+			return next(
+				errorCodes.notFound({
+					req,
+					message: `Applicant with id: ${applicantId} not found`,
+				})
+			);
+		}
+		res.locals.outData.applicant = result[0];
 		next();
 	} catch (err) {
 		console.error('Error in getApplicant: ', err.message);
@@ -79,8 +86,16 @@ const getAvailabilityForApplicant = async (req, res, next) => {
 	}
 	const applicantId = req.params.applicantId;
 	try {
-		res.locals.outData.applicant.availability =
-			await applicantsDAO.getAvailabilityForApplicant(applicantId);
+		const result = await applicantsDAO.getAvailabilityForApplicant(applicantId);
+		if (result.length === 0) {
+			return next(
+				errorCodes.notFound({
+					req,
+					message: `Applicant availability with person_id: ${applicantId}  not found`,
+				})
+			);
+		}
+		res.locals.outData.applicant.availability = result[0];
 		next();
 	} catch (err) {
 		console.error('Error in getAvailabilityForApplicant: ', err.message);
@@ -107,8 +122,17 @@ const getCompetenceForApplicant = async (req, res, next) => {
 	}
 	const applicantId = req.params.applicantId;
 	try {
-		res.locals.outData.applicant.competence =
-			await applicantsDAO.getCompetenceForApplicant(applicantId);
+		const result = await applicantsDAO.getCompetenceForApplicant(applicantId);
+		if (result.length === 0) {
+			return next(
+				errorCodes.notFound({
+					req,
+					message: `Applicant competence with person_id: ${applicantId} not found`,
+				})
+			);
+		}
+
+		res.locals.outData.applicant.competence = result[0];
 		next();
 	} catch (err) {
 		console.error('Error in getCompetenceForApplicant: ', err.message);

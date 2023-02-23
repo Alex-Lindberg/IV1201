@@ -3,12 +3,14 @@ const openapi = require('express-openapi');
 const path = require('path');
 
 const createApiDocPaths = require('./utils/createApiDocPaths');
+const { globalErrorHandler } = require('./middlewares/errorHandler');
 
 function initOpenApiRoutes({ app, apiDoc, apiSrcPath }) {
 	openapi.initialize({
 		apiDoc: apiDoc,
 		app: app,
 		paths: path.resolve(__dirname, apiSrcPath),
+		errorMiddleware: globalErrorHandler,
 	});
 }
 

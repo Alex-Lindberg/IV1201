@@ -19,7 +19,7 @@ const getApplicant = async (applicantId) => {
 	const query = `SELECT person_id, name, surname, pnr, email, username FROM person WHERE person_id = ${applicantId} AND role_id = ${roleMap.applicant}`;
 	try {
 		const result = await sendQuery(query);
-		return result.rows[0];
+		return result.rows;
 	} catch (err) {
 		throw err;
 	}
