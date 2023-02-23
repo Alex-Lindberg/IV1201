@@ -94,7 +94,7 @@ const ApplicantsPage = () => {
 			</div>
 			<div className='flex flex-1 flex-col text-tc mt-10'>
 				<Application
-					applicant={applicant}
+					personId={applicant?.person_id}
 					reset={reset}
 					isOpen={isOpen}
 					setOpen={setOpen}
