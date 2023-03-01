@@ -128,4 +128,33 @@ module.exports = {
 			$ref: '#/components/schemas/Applicant',
 		},
 	},
+	SignUp: {
+		type: 'object',
+		additionalProperties: false,
+		required: ['name', 'surname', 'pnr', 'email', 'username', 'password'],
+		properties: {
+			name: {
+				type: 'string',
+				example: 'John',
+			},
+			surname: {
+				type: 'string',
+				example: 'Doe',
+			},
+			pnr: {
+				$ref: '#/components/schemas/PersonalNumber',
+			},
+			email: {
+				$ref: '#/components/schemas/Email',
+			},
+			username: {
+				type: 'string',
+				example: 'johndoe',
+			},
+			password: {
+				type: 'string',
+				example: 'password',
+			},
+		},
+	},
 };
