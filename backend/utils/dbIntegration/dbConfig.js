@@ -21,10 +21,15 @@ const connect = async () => {
 	client.connect();
 };
 
-const sendQuery = async (query) => {
+const sendQuery = async (query, queryParameters) => {
 	try {
-		return await client.query(query);
+		console.log('query', query);
+		await client.query('BEGIN');
+		const result = await client.query(query, ...queryParameters);
+		await client.query('COMMIT');
+		return result;
 	} catch (error) {
+		client.query('ROLLBACK');
 		throw error;
 	}
 };
