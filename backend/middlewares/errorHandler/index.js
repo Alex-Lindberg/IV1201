@@ -13,6 +13,15 @@ const globalErrorHandler = (err, req, res, next) => {
 	if (Boom.isBoom(err)) {
 		return res.status(err.output.statusCode).json(err.data);
 	}
+	if (err.status === 400) {
+		return res.status(400).json({
+			statusCode: 400,
+			errorCode: 'Bad request',
+			method: req.method,
+			path: req.url,
+			message: err.errors[0].message,
+		});
+	}
 	return res.status(500).json({
 		statusCode: 500,
 		errorCode: 'Server error',
