@@ -22,9 +22,10 @@ module.exports = {
 			xl: '1280px',
 		},
 		colors: {
-			black : {...defaultTheme.colors.black},
-			white : {...defaultTheme.colors.white},
-			gray : {...defaultTheme.colors.gray},
+			...defaultTheme.colors.black,
+			...defaultTheme.colors.white,
+			...defaultTheme.colors.gray,
+			...defaultTheme.colors.transparent,
 			primary: {
 				DEFAULT: '#2b2e4a', 
 				100: '#d5d5db',
@@ -84,7 +85,18 @@ module.exports = {
 				700: "#919187",
 				800: "#60615a",
 				900: "#30302d"
-			}
+			},
+			accept: {
+				DEFAULT: "#52da00",
+				300: "#97e966",
+				400: "#75e133",
+				500: "#52da00",
+				600: "#42ae00",
+				700: "#318300",
+				800: "#215700",
+				900: "#102c00"
+			},
+
 		},
 		fontFamily: {
 			sans: ['Graphik', 'sans-serif'],
