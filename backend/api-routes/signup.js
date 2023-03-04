@@ -1,23 +1,35 @@
-const signup = require('../middlewares/auth'),
+const auth = require('../middlewares/auth'),
 	responseMiddleware = require('../middlewares/response');
 
 module.exports = {
 	post: [
-		signup.initLocals,
-		signup.signup,
-		responseMiddleware.sendResponse(200, 'signup'),
+		auth.initLocals,
+		auth.createUser,
+		auth.createSession,
+		responseMiddleware.sendResponse(201, 'signupData'),
 	],
 };
 
 module.exports.post.apiDoc = {
-	tags: ['signup'],
+	tags: ['auth'],
+	requestBody: {
+		required: true,
+		description: 'Sign up',
+		content: {
+			'application/json': {
+				schema: {
+					$ref: '#/components/schemas/SignUpData',
+				},
+			},
+		},
+	},
 	responses: {
-		200: {
+		201: {
 			description: 'Successfully signed up',
 			content: {
 				'application/json': {
 					schema: {
-						$ref: '#/components/schemas/SignUp',
+						$ref: '#/components/schemas/UserAndSession',
 					},
 				},
 			},
