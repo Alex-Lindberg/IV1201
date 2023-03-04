@@ -6,10 +6,11 @@
  * @param path - The path to the data you want to send back.
  */
 const sendResponse = (status, path) => (req, res) => {
-	if (!!path) res.status(status).json(res.locals.outData[path]);
-	else res.sendStatus(status);
+  if (!!path)
+    res.status(status).json(path === 'outData' ? res.locals.outData : res.locals.outData[path]);
+  else res.sendStatus(status);
 };
 
 module.exports = {
-	sendResponse,
+  sendResponse,
 };
