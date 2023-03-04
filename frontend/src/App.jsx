@@ -34,12 +34,11 @@ const getUserData = () =>
 		setTimeout(() => {
 			const user = defaultUser;
 			resolve(user);
-		},500)
+		}, 200)
 	);
 
 // @TODO: Fix Route protection
 const ProtectedLayout = ({ redirectPath = '/' }) => {
-	console.log('Attempting login');
 
 	// @TODO: fetch user with Jotai useAtom
 	const user = defaultUser;
@@ -47,13 +46,9 @@ const ProtectedLayout = ({ redirectPath = '/' }) => {
 	const location = useLocation();
 	const outlet = useOutlet();
 
-
 	return !user?.isAuthenticated ? (
 		<Navigate to={redirectPath} replace state={{ from: location }} />
 	) : (
-		// children ? (
-		// 	children
-		// ) :
 		<div className=' bg-primary-500 text-tc-500 '>
 			<Navbar />
 			{outlet}
@@ -65,6 +60,8 @@ const ProtectedLayout = ({ redirectPath = '/' }) => {
 // @TODO: Fix authentication
 const AuthLayout = () => {
 	const outlet = useOutlet();
+
+	// @TODO: Request user from backend using Jotai atom info
 	const { userPromise } = useLoaderData();
 	console.log(`🚮 | file: App.jsx:55 | AuthLayout | userPromise:`, userPromise);
 
