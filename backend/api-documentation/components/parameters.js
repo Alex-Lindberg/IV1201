@@ -20,4 +20,54 @@ module.exports = {
 			},
 		},
 	},
+	filterString: {
+		name: 'filterString',
+		in: 'query',
+		description: 'A string to filter the applicants by',
+		schema: {
+			type: 'string',
+			example: 'John',
+		},
+	},
+	orderBy: {
+		name: 'orderBy',
+		in: 'query',
+		description: 'A string to order the applicants by',
+		schema: {
+			type: 'string',
+			enum: ['asc', 'desc'],
+			example: 'asc',
+		},
+	},
+	filterBy: {
+		name: 'filterBy',
+		in: 'query',
+		description: 'A string to filter the applicants by',
+		schema: {
+			type: 'array',
+			items: {
+				type: 'string',
+				enum: ['name', 'surname'],
+			},
+			example: 'name',
+		},
+	},
+	offset: {
+		name: 'offset',
+		in: 'query',
+		description: 'The number of applicants to skip',
+		schema: {
+			type: 'integer',
+			example: 0,
+		},
+	},
+	size: {
+		name: 'size',
+		in: 'query',
+		description: 'The number of applicants to return',
+		schema: {
+			type: 'integer',
+			example: 25,
+		},
+	},
 };

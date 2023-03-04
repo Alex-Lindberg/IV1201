@@ -26,4 +26,21 @@ module.exports.get.apiDoc = {
 			},
 		},
 	},
+	parameters: [
+		{
+			$ref: '#/components/parameters/size',
+		},
+		{
+			$ref: '#/components/parameters/offset',
+		},
+		{
+			$ref: '#/components/parameters/filterString',
+		},
+		{
+			$ref: '#/components/parameters/orderBy',
+		},
+		{
+			$ref: '#/components/parameters/filterBy',
+		},
+	],
 };
