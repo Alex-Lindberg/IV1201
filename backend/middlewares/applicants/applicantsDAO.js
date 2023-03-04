@@ -9,7 +9,6 @@ const roleMap = {
 // TODO: do i need to implement a case where there is no parameters to send?
 
 const getApplicants = async () => {
-	console.log('getApplicants');
 	const query = `SELECT person_id, name, surname, pnr, email, username FROM person WHERE role_id = $1`;
 	try {
 		const result = await sendQuery(query, [roleMap.applicant]);

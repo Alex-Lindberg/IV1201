@@ -28,14 +28,16 @@ const logChanges = (query, queryParameters) => {
 	};
 	if (query.toUpperCase().includes('INSERT')) {
 		queryLog.query = queryLog.query.replace('INSERT INTO', 'INSERTED INTO');
+		console.log('queryLog', queryLog);
 	}
 	if (query.toUpperCase().includes('UPDATE')) {
 		queryLog.query = queryLog.query.replace('UPDATE', 'UPDATED');
+		console.log('queryLog', queryLog);
 	}
 	if (query.toUpperCase().includes('DELETE')) {
 		queryLog.query = queryLog.query.replace('DELETE FROM', 'DELETED FROM');
+		console.log('queryLog', queryLog);
 	}
-	console.log('queryLog', queryLog);
 };
 
 const sendQuery = async (query, queryParameters) => {
