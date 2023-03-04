@@ -27,18 +27,26 @@ const initLocals = (req, res, next) => {
  * @returns An array of applicants
  */
 const getAllApplicants = async (req, res, next) => {
-  try {
-    res.locals.outData.applicants = await applicantsDAO.getApplicants();
-    next();
-  } catch (err) {
-    console.error('Error in getAllApplicants: ', err.message);
-    return next(
-      errorCodes.serverError({
-        req,
-        message: 'Could not fetch applicants',
-      })
-    );
-  }
+	const { filterString, orderBy, filterBy, offset, size } = req.query;
+	try {
+		res.locals.outData.applicants = await applicantsDAO.getApplicants(
+			filterString,
+			orderBy,
+			filterBy,
+			offset,
+			size
+		);
+
+		next();
+	} catch (err) {
+		console.error('Error in getAllApplicants: ', err.message);
+		return next(
+			errorCodes.serverError({
+				req,
+				message: 'Could not fetch applicants',
+			})
+		);
+	}
 };
 
 /**
