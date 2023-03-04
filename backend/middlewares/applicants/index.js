@@ -27,12 +27,14 @@ const initLocals = (req, res, next) => {
  */
 const getAllApplicants = async (req, res, next) => {
 	const { filterString, orderBy, filterBy, offset, size } = req.query;
-	console.log(
-		'🚀 ~ file: index.js:30 ~ getAllApplicants ~ filterBy:',
-		filterBy
-	);
 	try {
-		res.locals.outData.applicants = await applicantsDAO.getApplicants();
+		res.locals.outData.applicants = await applicantsDAO.getApplicants(
+			filterString,
+			orderBy,
+			filterBy,
+			offset,
+			size
+		);
 
 		next();
 	} catch (err) {
