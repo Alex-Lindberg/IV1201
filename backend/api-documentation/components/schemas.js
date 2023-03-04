@@ -133,6 +133,24 @@ module.exports = {
 			$ref: '#/components/schemas/Applicant',
 		},
 	},
+	SearchResults: {
+		type: 'object',
+		additionalProperties: false,
+		required: ['applicants', 'total_count'],
+		properties: {
+			applicants: {
+				$ref: '#/components/schemas/ListOfApplicants',
+			},
+			total_count: {
+				type: 'integer',
+				example: 1,
+			},
+			offset: {
+				type: 'integer',
+				example: 1,
+			},
+		},
+	},
 	User: {
 		type: 'object',
 		additionalProperties: false,

@@ -1,4 +1,7 @@
 const { sendQuery } = require('../../utils/dbIntegration/dbConfig');
+const {
+	applicantId,
+} = require('../../api-documentation/components/parameters');
 
 const roleMap = {
 	recruiter: 1,
@@ -6,25 +9,38 @@ const roleMap = {
 };
 
 const getApplicants = async (filterString, orderBy, filterBy, offset, size) => {
-	const query = `
-      SELECT person_id, name, surname, pnr, email, username
-      FROM person
-      WHERE 
-        role_id = $1 AND
-        surname LIKE '%' || $2 || '%'
-        ORDER BY $3, $4
-        LIMIT $5
-        OFFSET $6`;
+	if (!!filterString) {
+	}
+
+	const query =
+		!!filterString && !!filterBy
+			? `
+	SELECT person_id, name, surname, pnr, email, username
+	 FROM person
+	 WHERE
+	   role_id = $1 AND
+      (${filterBy} LIKE '%' || $2 || '%' OR true)
+	   ORDER BY ${filterBy} ${orderBy}`
+			: `SELECT person_id, name, surname, pnr, email, username FROM person WHERE role_id = $1 ORDER BY person_id ${
+					orderBy ?? 'DESC'
+			  }`;
 	try {
-		const result = await sendQuery(query, [
-			roleMap.applicant,
-			filterString,
-			filterBy,
-			orderBy,
-			size,
-			offset,
-		]);
-		return result.rows;
+		const queryParameters =
+			!!filterString && !!filterBy
+				? [roleMap.applicant, filterString]
+				: [roleMap.applicant];
+		const result = await sendQuery(query, queryParameters);
+		const applicants = !size
+			? result.rows
+			: result.rows.slice(
+					offset ? offset : 0,
+					offset ? offset + size : 0 + size
+			  );
+		return {
+			applicants: applicants,
+			offset: offset,
+			total_count: result.rowCount,
+		};
 	} catch (err) {
 		throw err;
 	}

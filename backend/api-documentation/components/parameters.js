@@ -42,13 +42,10 @@ module.exports = {
 	filterBy: {
 		name: 'filterBy',
 		in: 'query',
-		description: 'A string to filter the applicants by',
+		description: 'A column name to filter the applicants by',
 		schema: {
-			type: 'array',
-			items: {
-				type: 'string',
-				enum: ['name', 'surname'],
-			},
+			type: 'string',
+			enum: ['name', 'surname', 'pnr', 'email', 'username'],
 			example: 'name',
 		},
 	},

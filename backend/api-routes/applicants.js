@@ -16,11 +16,11 @@ module.exports.get.apiDoc = {
 	tags: ['applicants'],
 	responses: {
 		200: {
-			description: 'Successfully fecthed list of applicants',
+			description: 'Successfully fetched list of applicants',
 			content: {
 				'application/json': {
 					schema: {
-						$ref: '#/components/schemas/ListOfApplicants',
+						$ref: '#/components/schemas/SearchResults',
 					},
 				},
 			},
