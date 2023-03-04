@@ -121,6 +121,8 @@ CREATE TABLE public.person (
 
 ALTER TABLE public.person OWNER TO postgres;
 
+
+
 --
 -- Name: person_person_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
@@ -4900,7 +4902,7 @@ ALTER TABLE ONLY public.person
 
 create table public.sessions
 (
-    id              uuid not null
+    session_id              uuid not null
         constraint sessions_pk
             primary key,
     person_id       integer
@@ -4914,3 +4916,11 @@ alter table public.sessions
 
 CREATE EXTENSION pgcrypto;
 update public.person set password = crypt('password', gen_salt('bf')) where password IS NOT NULL;
+
+
+
+ALTER TABLE person
+ADD CONSTRAINT constraint_name UNIQUE (email);
+
+alter table public.sessions
+    alter column id set default gen_random_uuid();
