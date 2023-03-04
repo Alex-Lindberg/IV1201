@@ -4,7 +4,7 @@ const auth = require('../middlewares/auth'),
 module.exports = {
   post: [
     auth.initLocals,
-    auth.createUser,
+    auth.getUser,
     auth.createSession,
     responseMiddleware.sendResponse(201, 'outData'),
   ],
@@ -14,18 +14,18 @@ module.exports.post.apiDoc = {
   tags: ['auth'],
   requestBody: {
     required: true,
-    description: 'Sign up',
+    description: 'Logg in',
     content: {
       'application/json': {
         schema: {
-          $ref: '#/components/schemas/SignUpData',
+          $ref: '#/components/schemas/LoginData',
         },
       },
     },
   },
   responses: {
     201: {
-      description: 'Successfully signed up',
+      description: 'Successfully logged in',
       content: {
         'application/json': {
           schema: {

@@ -199,72 +199,91 @@ module.exports = {
 			},
 		},
 	},
+  SignUpData: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['name', 'surname', 'pnr', 'email', 'username', 'password'],
+    properties: {
+      name: {
+        type: 'string',
+        example: 'John',
+        minimum: 1,
+        maximum: 255,
+      },
+      surname: {
+        type: 'string',
+        example: 'Doe',
+        minimum: 1,
+        maximum: 255,
+      },
+      pnr: {
+        $ref: '#/components/schemas/PersonalNumber',
+      },
+      email: {
+        $ref: '#/components/schemas/Email',
+      },
+      username: {
+        type: 'string',
+        example: 'johndoe',
+        minimum: 1,
+        maximum: 255,
+      },
+      password: {
+        type: 'string',
+        example: 'password',
+        minimum: 1,
+        maximum: 255,
+      },
+    },
+  },
 
-	SignUpData: {
-		type: 'object',
-		additionalProperties: false,
-		required: ['name', 'surname', 'pnr', 'email', 'username', 'password'],
-		properties: {
-			name: {
-				type: 'string',
-				example: 'John',
-				minimum: 1,
-				maximum: 255,
-			},
-			surname: {
-				type: 'string',
-				example: 'Doe',
-				minimum: 1,
-				maximum: 255,
-			},
-			pnr: {
-				$ref: '#/components/schemas/PersonalNumber',
-			},
-			email: {
-				$ref: '#/components/schemas/Email',
-			},
-			username: {
-				type: 'string',
-				example: 'johndoe',
-				minimum: 1,
-				maximum: 255,
-			},
-			password: {
-				type: 'string',
-				example: 'password',
-				minimum: 1,
-				maximum: 255,
-			},
-		},
-	},
+  LoginData: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['username', 'password'],
+    properties: {
+      username: {
+        type: 'string',
+        example: 'johndoe',
+        minimum: 1,
+        maximum: 255,
+      },
+      password: {
+        type: 'string',
+        example: 'password',
+        minimum: 1,
+        maximum: 255,
+      },
+    },
+  },
 
-	Session: {
-		type: 'object',
-		additionalProperties: false,
-		required: ['session_id', 'expiration_date'],
-		properties: {
-			session_id: {
-				$ref: '#/components/schemas/Uuid',
-			},
-			person_id: {
-				$ref: '#/components/schemas/GenericId',
-			},
-			expiration_date: {
-				type: 'string',
-			},
-		},
-	},
-	UserAndSession: {
-		type: 'object',
-		additionalProperties: false,
-		required: ['user', 'session'],
-		properties: {
-			user: {
-				$ref: '#/components/schemas/User',
-			},
-			session: {
-				$ref: '#/components/schemas/Session',
-			},
-		},
-	},
+  Session: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['session_id', 'expiration_date'],
+    properties: {
+      session_id: {
+        $ref: '#/components/schemas/Uuid',
+      },
+      person_id: {
+        $ref: '#/components/schemas/GenericId',
+      },
+      expiration_date: {
+        type: 'string',
+      },
+    },
+  },
+  UserAndSession: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['user', 'session'],
+    properties: {
+      user: {
+        $ref: '#/components/schemas/User',
+      },
+      session: {
+        $ref: '#/components/schemas/Session',
+      },
+    },
+  },
 };

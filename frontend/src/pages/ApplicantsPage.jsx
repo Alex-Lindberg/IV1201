@@ -16,7 +16,7 @@ const ApplicantsPage = () => {
 
 	const ApplicantList = () => {
 		return list.isLoading ? (
-			<div role='status' className='text-center md:mt-24'>
+			<div role='status' className='text-center md:mt-24 bg-primary'>
 				<Spinner className='inline w-8 h-8 mr-2 text-primary-700 animate-spin dark:text-tc fill-secondary' />
 				<span className='sr-only'>Loading...</span>
 			</div>
@@ -26,9 +26,9 @@ const ApplicantsPage = () => {
 				{list?.error?.message && <span>Error: {list.error.message}</span>}
 			</>
 		) : !list.data.pages ? (
-			<span className='md:mt-24'>No applicants found</span>
+			<span className='md:mt-24 bg-primary'>No applicants found</span>
 		) : (
-			<div className='flex flex-3 overflow-y-auto md:mt-24'>
+			<div className='flex flex-3 overflow-y-auto md:mt-24 bg-primary'>
 				{list.data.pages.map((page, i) => {
 					return (
 						<ul className='max-w-xl flex overflow-y-auto flex-col' key={i}>

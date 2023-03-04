@@ -11,6 +11,15 @@ const Boom = require('@hapi/boom'),
  */
 const globalErrorHandler = (err, req, res, next) => {
   if (Boom.isBoom(err)) {
+    if (err.output.statusCode === 401) {
+      return res.status(err.output.statusCode).json({
+        statusCode: 401,
+        errorCode: 'Unauthorized',
+        method: req.method,
+        path: req.url,
+        message: err.output.payload.message,
+      });
+    }
     return res.status(err.output.statusCode).json(err.data);
   }
   if (err.status === 400) {

@@ -1,15 +1,15 @@
 const auth = require('../middlewares/auth'),
-	applicantsMiddleware = require('../middlewares/applicants'),
-	responseMiddleware = require('../middlewares/response');
+  applicantsMiddleware = require('../middlewares/applicants'),
+  responseMiddleware = require('../middlewares/response');
 
 module.exports = {
-	get: [
-		auth.initLocals,
-		auth.authorize,
-		applicantsMiddleware.initLocals,
-		applicantsMiddleware.getAllApplicants,
-		responseMiddleware.sendResponse(200, 'applicants'),
-	],
+  get: [
+    auth.initLocals,
+    auth.authorize,
+    applicantsMiddleware.initLocals,
+    applicantsMiddleware.getAllApplicants,
+    responseMiddleware.sendResponse(200, 'applicants'),
+  ],
 };
 
 module.exports.get.apiDoc = {

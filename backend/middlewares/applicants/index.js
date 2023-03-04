@@ -1,5 +1,5 @@
 const { applicantsDAO } = require('./applicantsDAO'),
-	{ errorCodes } = require('../errorcodes');
+  { errorCodes } = require('../errorcodes');
 
 /**
  * It takes the `res.locals` object and adds a new property called `outData` to it
@@ -8,14 +8,15 @@ const { applicantsDAO } = require('./applicantsDAO'),
  * @param next - This is a function that you call when you're done with your middleware.
  */
 const initLocals = (req, res, next) => {
-	res.locals = {
-		...res.locals,
-		outData: {
-			applicants: null,
-			applicant: null,
-		},
-	};
-	next();
+  res.locals = {
+    ...res.locals,
+    outData: {
+      ...res.locals.outData,
+      applicants: null,
+      applicant: null,
+    },
+  };
+  next();
 };
 
 /**
@@ -56,28 +57,28 @@ const getAllApplicants = async (req, res, next) => {
  * @returns The applicant object is being returned.
  */
 const getApplicant = async (req, res, next) => {
-	const applicantId = req.params.applicantId;
-	try {
-		const result = await applicantsDAO.getApplicant(applicantId);
-		if (result.length === 0) {
-			return next(
-				errorCodes.notFound({
-					req,
-					message: `Applicant with id: ${applicantId} not found`,
-				})
-			);
-		}
-		res.locals.outData.applicant = result[0];
-		next();
-	} catch (err) {
-		console.error('Error in getApplicant: ', err.message);
-		return next(
-			errorCodes.serverError({
-				req,
-				message: 'Could not fetch applicant',
-			})
-		);
-	}
+  const applicantId = req.params.applicantId;
+  try {
+    const result = await applicantsDAO.getApplicant(applicantId);
+    if (result.length === 0) {
+      return next(
+        errorCodes.notFound({
+          req,
+          message: `Applicant with id: ${applicantId} not found`,
+        })
+      );
+    }
+    res.locals.outData.applicant = result[0];
+    next();
+  } catch (err) {
+    console.error('Error in getApplicant: ', err.message);
+    return next(
+      errorCodes.serverError({
+        req,
+        message: 'Could not fetch applicant',
+      })
+    );
+  }
 };
 
 /**
@@ -88,32 +89,32 @@ const getApplicant = async (req, res, next) => {
  * @returns An array of objects with the following properties:
  */
 const getAvailabilityForApplicant = async (req, res, next) => {
-	const include = req.query.include;
-	if (!include || !include.includes('availability')) {
-		return next();
-	}
-	const applicantId = req.params.applicantId;
-	try {
-		const result = await applicantsDAO.getAvailabilityForApplicant(applicantId);
-		if (result.length === 0) {
-			return next(
-				errorCodes.notFound({
-					req,
-					message: `Applicant availability with person_id: ${applicantId}  not found`,
-				})
-			);
-		}
-		res.locals.outData.applicant.availability = result[0];
-		next();
-	} catch (err) {
-		console.error('Error in getAvailabilityForApplicant: ', err.message);
-		return next(
-			errorCodes.serverError({
-				req,
-				message: 'Could not fetch applicant availability',
-			})
-		);
-	}
+  const include = req.query.include;
+  if (!include || !include.includes('availability')) {
+    return next();
+  }
+  const applicantId = req.params.applicantId;
+  try {
+    const result = await applicantsDAO.getAvailabilityForApplicant(applicantId);
+    if (result.length === 0) {
+      return next(
+        errorCodes.notFound({
+          req,
+          message: `Applicant availability with person_id: ${applicantId}  not found`,
+        })
+      );
+    }
+    res.locals.outData.applicant.availability = result[0];
+    next();
+  } catch (err) {
+    console.error('Error in getAvailabilityForApplicant: ', err.message);
+    return next(
+      errorCodes.serverError({
+        req,
+        message: 'Could not fetch applicant availability',
+      })
+    );
+  }
 };
 
 /**
@@ -124,39 +125,39 @@ const getAvailabilityForApplicant = async (req, res, next) => {
  * @returns The applicant's competence.
  */
 const getCompetenceForApplicant = async (req, res, next) => {
-	const include = req.query.include;
-	if (!include || !include.includes('competence')) {
-		return next();
-	}
-	const applicantId = req.params.applicantId;
-	try {
-		const result = await applicantsDAO.getCompetenceForApplicant(applicantId);
-		if (result.length === 0) {
-			return next(
-				errorCodes.notFound({
-					req,
-					message: `Applicant competence with person_id: ${applicantId} not found`,
-				})
-			);
-		}
+  const include = req.query.include;
+  if (!include || !include.includes('competence')) {
+    return next();
+  }
+  const applicantId = req.params.applicantId;
+  try {
+    const result = await applicantsDAO.getCompetenceForApplicant(applicantId);
+    if (result.length === 0) {
+      return next(
+        errorCodes.notFound({
+          req,
+          message: `Applicant competence with person_id: ${applicantId} not found`,
+        })
+      );
+    }
 
-		res.locals.outData.applicant.competence = result[0];
-		next();
-	} catch (err) {
-		console.error('Error in getCompetenceForApplicant: ', err.message);
-		return next(
-			errorCodes.serverError({
-				req,
-				message: 'Could not fetch applicant competence',
-			})
-		);
-	}
+    res.locals.outData.applicant.competence = result[0];
+    next();
+  } catch (err) {
+    console.error('Error in getCompetenceForApplicant: ', err.message);
+    return next(
+      errorCodes.serverError({
+        req,
+        message: 'Could not fetch applicant competence',
+      })
+    );
+  }
 };
 
 module.exports = {
-	initLocals,
-	getAllApplicants,
-	getApplicant,
-	getAvailabilityForApplicant,
-	getCompetenceForApplicant,
+  initLocals,
+  getAllApplicants,
+  getApplicant,
+  getAvailabilityForApplicant,
+  getCompetenceForApplicant,
 };
