@@ -21,12 +21,29 @@ const connect = async () => {
 	client.connect();
 };
 
+const logChanges = (query, queryParameters) => {
+	const queryLog = {
+		query,
+		queryParameters,
+	};
+	if (query.toUpperCase().includes('INSERT')) {
+		queryLog.query = queryLog.query.replace('INSERT INTO', 'INSERTED INTO');
+	}
+	if (query.toUpperCase().includes('UPDATE')) {
+		queryLog.query = queryLog.query.replace('UPDATE', 'UPDATED');
+	}
+	if (query.toUpperCase().includes('DELETE')) {
+		queryLog.query = queryLog.query.replace('DELETE FROM', 'DELETED FROM');
+	}
+	console.log('queryLog', queryLog);
+};
+
 const sendQuery = async (query, queryParameters) => {
 	try {
-		console.log('query', query);
 		await client.query('BEGIN');
-		const result = await client.query(query, ...queryParameters);
+		const result = await client.query(query, queryParameters);
 		await client.query('COMMIT');
+		logChanges(query, queryParameters);
 		return result;
 	} catch (error) {
 		client.query('ROLLBACK');
