@@ -23,6 +23,7 @@ const globalErrorHandler = (err, req, res, next) => {
     return res.status(err.output.statusCode).json(err.data);
   }
   if (err.status === 400) {
+    console.error('400 error: ', err);
     return res.status(400).json({
       statusCode: 400,
       errorCode: 'Bad request',
