@@ -5,6 +5,8 @@
 -- Dumped from database version 13.6 (Ubuntu 13.6-0ubuntu0.21.10.1)
 -- Dumped by pg_dump version 13.6 (Ubuntu 13.6-0ubuntu0.21.10.1)
 
+CREATE EXTENSION pgcrypto;
+
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -4902,7 +4904,7 @@ ALTER TABLE ONLY public.person
 
 create table public.sessions
 (
-    session_id              uuid not null
+    session_id              uuid
         constraint sessions_pk
             primary key,
     person_id       integer
@@ -4914,13 +4916,9 @@ alter table public.sessions
     owner to postgres;
 
 
-CREATE EXTENSION pgcrypto;
-update public.person set password = crypt('password', gen_salt('bf')) where password IS NOT NULL;
 
-
-
-ALTER TABLE person
+ALTER TABLE public.person
 ADD CONSTRAINT constraint_name UNIQUE (email);
 
 alter table public.sessions
-    alter column id set default gen_random_uuid();
+    alter column session_id set default gen_random_uuid();
