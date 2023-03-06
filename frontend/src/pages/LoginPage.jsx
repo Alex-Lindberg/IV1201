@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import LoginForm from '../components/LoginForm';
-import RegisterForm from '../components/RegisterForm';
-import handleLogin from '../hooks/auth';
-import { login as apilogin } from '../api';
-import { Spinner } from '../assets';
+import { Loader, LoginForm, RegisterForm } from '../components';
+import handleLogin from '../lib/jotai';
 import { api } from '../utils/api';
 
 const LoginPage = () => {
@@ -23,35 +20,16 @@ const LoginPage = () => {
 	const handleSubmitLogin = async () => {
 		console.log('Loging in user', { username: username, password: password });
 		if (!username || !password) return;
-		// apilogin(username, password)
-		await mutateLogin([{ username: username, password: password }])
-		console.log(
-			`🚮 | file: LoginPage.jsx:23 | handleSubmitLogin | login:`,
-			login
-		);
+		await mutateLogin([{ username: username, password: password }]);
 		if (login.isSuccess) {
-			api.setUser(
-				login.data?.user?.person_id,
-				login.data?.session?.session_id
-			);
+			api.setUser(login.data?.user?.person_id, login.data?.session?.session_id);
 			navigate('/app/applicants');
-		}		
+		}
 	};
-
-	// useEffect(() => {
-	// 	if (login.isSuccess) {
-	// 		api.setUser(
-	// 			login.data?.user?.person_id,
-	// 			login.data?.session?.session_id
-	// 		);
-	// 		navigate('/app/applicants');
-	// 	}
-	// }, [login.data])
 
 	const handleSubmitRegister = () => {
 		console.log('Register');
 	};
-
 
 	return (
 		<div className='bg-primary flex flex-col min-h-screen text-tc'>
@@ -61,10 +39,7 @@ const LoginPage = () => {
 						id='backdrop'
 						className='fixed inset-0 bg-primary-900 bg-opacity-40'
 					/>
-					<div role='status' className='text-center md:mt-24 bg-primary'>
-						<Spinner className='inline w-8 h-8 mr-2 text-primary-700 animate-spin dark:text-tc fill-secondary' />
-						<span className='sr-only'>Loading...</span>
-					</div>
+					<Loader />
 				</>
 			) : login.isError ? (
 				<>

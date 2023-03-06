@@ -1,8 +1,8 @@
 import { Provider } from 'jotai';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useHydrateAtoms } from 'jotai/react/utils';
 import { queryClientAtom } from 'jotai-tanstack-query';
 
@@ -12,12 +12,12 @@ import './index.css';
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-		  refetchOnWindowFocus: false,
-		  refetchOnReconnect: false,
-		  retry: false,
-		  staleTime: 5*60*1000,
+			refetchOnWindowFocus: false,
+			refetchOnReconnect: false,
+			retry: false,
+			staleTime: 5 * 60 * 1000,
 		},
-	  },	
+	},
 });
 
 const HydrateAtoms = ({ children }) => {
@@ -31,9 +31,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 			<Provider>
 				<HydrateAtoms>
 					<App />
-				<ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
 				</HydrateAtoms>
 			</Provider>
+			<ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
 		</QueryClientProvider>
 	</React.StrictMode>
 );

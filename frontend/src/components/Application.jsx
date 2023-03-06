@@ -1,37 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { useQuery } from 'react-query';
-import { fetchApplication } from '../api/applications';
+import { queryApplicant } from '../lib/reactQuery';
 
 const Application = ({ personId, reset, isOpen, setOpen }) => {
 	const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-	
-	const include = ['competence', 'availability'];
-	const applicant = useQuery({
-		queryKey: ['applicant', { personId: personId, include }],
-		queryFn: fetchApplication,
-		enabled: isOpen,
-	});
-
-	/* No support on backend yet */
-	const ApplicantStatus = ({ status }) => {
-		const color =
-			status === 'Accepted'
-				? 'text-accept-800 bg-accept-400'
-				: status === 'Rejected'
-				? 'text-accent2 bg-secondary-300'
-				: 'text-accent2-700 bg-primary-100';
-		return (
-			<div className='font-semibold'>
-				Status:{' '}
-				<span
-					className={`px-2 py-1 text-sm font-medium rounded-md border border-tc ${color}`}
-				>
-					{status ?? 'Unknown'}
-				</span>
-			</div>
-		);
-	};
+	const applicant = queryApplicant(personId, isOpen);
 
 	return !applicant.data ? (
 		<div>Loading</div>
@@ -95,57 +68,12 @@ const Application = ({ personId, reset, isOpen, setOpen }) => {
 								<h4 className='row-start-2 md:col-span-3 text-sm text-primary-400 whitespace-nowrap'>
 									{applicant?.data?.email}
 								</h4>
-								<div
-									id='availability'
-									className='row-start-3 col-span-2 md:col-span-3 mt-2 text-sm text-primary-500
-									border-t-2 border-t-primary-100 border-solid pt-3'
-								>
-									<p className='font-semibold'>Availability</p>
-									{applicant?.data?.availability?.map((dates) => {
-										return (
-											<div>
-												<span className='whitespace-nowrap'>
-													{new Date(dates?.from_date).toLocaleDateString(
-														'en',
-														dateOptions
-													)}
-												</span>
-												{' - '}
-												<span className='whitespace-nowrap'>
-													{new Date(dates?.to_date).toLocaleDateString(
-														'en',
-														dateOptions
-													)}
-												</span>
-											</div>
-										);
-									})}
-								</div>
+								<Availability
+									availability={applicant?.data?.availability}
+									dateOptions={dateOptions}
+								/>
 								<br className='border border-secondary-600 border-solid col-span-2 md:col-span-3' />
-								<div
-									id='competence'
-									className='
-										row-start-4 col-span-2 md:col-span-3 mt-2 text-sm text-primary-500 
-										border-t-2 border-t-primary-100 border-solid pt-3'
-								>
-									<div className='flex justify-between'>
-										<span className='font-semibold'>Competence</span>
-										<span>Experience (years)</span>
-									</div>
-									{applicant?.data?.competence?.map((c, i) => {
-										return (
-											<div
-												className={`flex justify-between
-												bg-tc-${i % 2 === 0 ? '500' : '300'}`}
-											>
-												<span className='whitespace-nowrap'>{c.name}</span>
-												<span className='whitespace-nowrap'>
-													{c.years_of_experience}
-												</span>
-											</div>
-										);
-									})}
-								</div>
+								<Competences competence={applicant?.data?.competence} />
 								<div className='mt-4 row-start-5 md:col-span-3 col-span-2 flex justify-between items-center'>
 									<ApplicantStatus status={applicant?.data?.status} />
 									<button
@@ -169,6 +97,80 @@ const Application = ({ personId, reset, isOpen, setOpen }) => {
 				</div>
 			</Dialog>
 		</Transition>
+	);
+};
+
+const ApplicantStatus = ({ status }) => {
+	const color =
+		status === 'Accepted'
+			? 'text-accept-800 bg-accept-400'
+			: status === 'Rejected'
+			? 'text-accent2 bg-secondary-300'
+			: 'text-accent2-700 bg-primary-100';
+	return (
+		<div className='font-semibold'>
+			Status:{' '}
+			<span
+				className={`px-2 py-1 text-sm font-medium rounded-md border border-tc ${color}`}
+			>
+				{status ?? 'Unknown'}
+			</span>
+		</div>
+	);
+};
+
+const Availability = ({ availability, dateOptions }) => (
+	<div
+		id='availability'
+		className='row-start-3 col-span-2 md:col-span-3 mt-2 text-sm text-primary-500
+			border-t-2 border-t-primary-100 border-solid pt-3'
+	>
+		<p className='font-semibold'>Availability</p>
+		{[availability].flat().map((dates, i) => {
+			return (
+				<div key={i}>
+					<span className='whitespace-nowrap'>
+						{new Date(dates?.from_date).toLocaleDateString('en', dateOptions)}
+					</span>
+					{' - '}
+					<span className='whitespace-nowrap'>
+						{new Date(dates?.to_date).toLocaleDateString('en', dateOptions)}
+					</span>
+				</div>
+			);
+		})}
+	</div>
+);
+
+const Competences = ({ competence }) => {
+	const arr = [competence].flat();
+	return (
+		<div
+			id='competence'
+			className='row-start-4 col-span-2 md:col-span-3 mt-2 text-sm text-primary-500 
+			border-t-2 border-t-primary-100 border-solid pt-3'
+		>
+			<div className='flex justify-between'>
+				<span className='font-semibold'>Competence</span>
+				<span>Experience (years)</span>
+			</div>
+			{arr.length !== 0 ? (
+				<div>None</div>
+			) : (
+				arr.map((c, i) => {
+					return (
+						<div
+							key={i}
+							className={`flex justify-between
+				bg-tc-${i % 2 === 0 ? '500' : '300'}`}
+						>
+							<span className='whitespace-nowrap'>{c.name}</span>
+							<span className='whitespace-nowrap'>{c.years_of_experience}</span>
+						</div>
+					);
+				})
+			)}
+		</div>
 	);
 };
 
