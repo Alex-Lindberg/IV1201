@@ -3,8 +3,6 @@ import { Application, PaginationMenu, Searchbar } from '../components';
 import { OpenIcon, Spinner } from '../assets';
 import { queryApplications } from '../lib/reactQuery';
 
-const PAGE_SIZE = 2;
-
 const ApplicantsPage = () => {
 	const [currentOffset, setCurrentOffset] = useState(0);
 	const [size, setSize] = useState(1);

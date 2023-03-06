@@ -22,16 +22,13 @@ export const queryApplications = (offset = 0, size = 1) =>
 	useInfiniteQuery({
 		queryKey: ['applicants', { size: size }],
 		queryFn: ({pageParam = offset}) => fetchApplications(pageParam, size),
+		keepPreviousData: true,
 		getNextPageParam: (lastPage) => {
 			const { offset, size, total_count } = lastPage
-			if (offset + size < total_count)
-				return offset + size;
-			return null;
+			return Math.min(offset + size, total_count - 1)
 		},
 		getPreviousPageParam: (firstPage) => {
 			const { offset, size } = firstPage
-			if (offset - size >= 0)
-				return offset - size;
-			return null;
+			return Math.max(offset - size, 0)
 		},
 	});
