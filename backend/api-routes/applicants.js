@@ -16,17 +16,32 @@ module.exports.get.apiDoc = {
   tags: ['applicants'],
   responses: {
     200: {
-      description: 'Successfully fecthed list of applicants',
+      description: 'Successfully fetched list of applicants',
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/ListOfApplicants',
+            $ref: '#/components/schemas/SearchResults',
           },
         },
       },
     },
   },
   parameters: [
+    {
+      $ref: '#/components/parameters/size',
+    },
+    {
+      $ref: '#/components/parameters/offset',
+    },
+    {
+      $ref: '#/components/parameters/filterString',
+    },
+    {
+      $ref: '#/components/parameters/orderBy',
+    },
+    {
+      $ref: '#/components/parameters/filterBy',
+    },
     {
       $ref: '#/components/parameters/personId',
     },

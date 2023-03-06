@@ -1,29 +1,55 @@
 const { sendQuery } = require('../../utils/dbIntegration/dbConfig');
+const {
+	applicantId,
+} = require('../../api-documentation/components/parameters');
 
 const roleMap = {
 	recruiter: 1,
 	applicant: 2,
 };
 
-// TODO: check if i can send it as a string without the need of sending the parameters
-// TODO: do i need to implement a case where there is no parameters to send?
+const getApplicants = async (filterString, orderBy, filterBy, offset, size) => {
+	if (!!filterString) {
+	}
 
-const getApplicants = async () => {
-	console.log('getApplicants');
-	const query = `SELECT person_id, name, surname, pnr, email, username FROM person WHERE role_id = $1`;
+	const query =
+		!!filterString && !!filterBy
+			? `
+	SELECT person_id, name, surname, pnr, email, username
+	 FROM person
+	 WHERE
+	   role_id = $1 AND
+      (${filterBy} LIKE '%' || $2 || '%' OR true)
+	   ORDER BY ${filterBy} ${orderBy}`
+			: `SELECT person_id, name, surname, pnr, email, username FROM person WHERE role_id = $1 ORDER BY person_id ${
+					orderBy ?? 'DESC'
+			  }`;
 	try {
-		const result = await sendQuery(query, [roleMap.applicant]);
-		return result.rows;
+		const queryParameters =
+			!!filterString && !!filterBy
+				? [roleMap.applicant, filterString]
+				: [roleMap.applicant];
+		const result = await sendQuery(query, queryParameters);
+		const applicants = !size
+			? result.rows
+			: result.rows.slice(
+					offset ? offset : 0,
+					offset ? offset + size : 0 + size
+			  );
+		return {
+			applicants: applicants,
+			offset: offset,
+			total_count: result.rowCount,
+		};
 	} catch (err) {
 		throw err;
 	}
 };
 
 const getApplicant = async (applicantId) => {
-	console.log('getApplicant');
-	const query = `SELECT person_id, name, surname, pnr, email, username FROM person WHERE person_id = ${applicantId} AND role_id = $1`;
+	const query = `SELECT person_id, name, surname, pnr, email, username FROM person WHERE person_id = $1 AND role_id = $2`;
 	try {
-		const result = await sendQuery(query, [roleMap.applicant]);
+		const result = await sendQuery(query, [applicantId, roleMap.applicant]);
 		return result.rows;
 	} catch (err) {
 		throw err;
@@ -31,7 +57,6 @@ const getApplicant = async (applicantId) => {
 };
 
 const getAvailabilityForApplicant = async (applicantId) => {
-	console.log('getAvailabilityForApplicant');
 	const query = `SELECT from_date,to_date,availability_id FROM availability where person_id = $1`;
 	try {
 		const result = await sendQuery(query, [applicantId]);
@@ -42,7 +67,6 @@ const getAvailabilityForApplicant = async (applicantId) => {
 };
 
 const getCompetenceForApplicant = async (applicantId) => {
-	console.log('getCompetenceForApplicant');
 	const query = `
 		SELECT competence_profile.competence_id, years_of_experience,name 
 		FROM competence_profile 
