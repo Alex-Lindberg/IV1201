@@ -1,5 +1,4 @@
 const Footer = () => {
-	console.log('Not implemented');
 	return (
 		<div className="bg-primary-700 bottom-0 text-tc
         md:px-5 md:py-10 md:mt-12

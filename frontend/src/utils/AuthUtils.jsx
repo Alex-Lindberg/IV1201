@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import handleLogin from '../hooks/auth';
+import handleLogin from '../lib/jotai';
 import { api } from './api';
 
 export const AuthProvider = ({ children }) => {

@@ -1,14 +1,15 @@
-import { useInfiniteQuery } from 'react-query';
-import { fetchApplications } from '../api';
 import { useState } from 'react';
-import { Application, Searchbar } from '../components';
+import { Application, PaginationMenu, Searchbar } from '../components';
 import { OpenIcon, Spinner } from '../assets';
+import { queryApplications } from '../lib/reactQuery';
+
+const PAGE_SIZE = 2;
 
 const ApplicantsPage = () => {
-	const list = useInfiniteQuery('applicants', fetchApplications, {
-		getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
-		getPreviousPageParam: (firstPage, pages) => firstPage.prevCursor,
-	});
+	const [currentOffset, setCurrentOffset] = useState(0);
+	const [size, setSize] = useState(1);
+
+	const list = queryApplications(currentOffset, size);
 
 	const [applicant, setApplicant] = useState(null);
 	const [isOpen, setOpen] = useState(false);
@@ -22,48 +23,48 @@ const ApplicantsPage = () => {
 			</div>
 		) : list.isError ? (
 			<>
-				<span className='md:mt-24'>The server seems to have problems, Try reloading!</span>
+				<span className='md:mt-24'>
+					The server seems to have problems, Try reloading!
+				</span>
 				{list?.error?.message && <span>Error: {list.error.message}</span>}
 			</>
 		) : !list.data.pages ? (
 			<span className='md:mt-24 bg-primary'>No applicants found</span>
 		) : (
 			<div className='flex flex-3 overflow-y-auto md:mt-24 bg-primary'>
-				{list.data.pages.map((page, i) => {
-					return (
-						<ul className='max-w-xl flex overflow-y-auto flex-col' key={i}>
-							{page.map((applicant, j) => (
-								<li
-									key={j}
-									className='
+				<ul className='max-w-xl flex overflow-y-auto flex-col'>
+					{list.data.pages.map((page, i) => {
+						return page.applicants.map((applicant, j) => (
+							<li
+								key={i + j}
+								className='
 										py-3 mb-3 px-5
 										border border-accent2 rounded-md 
 										hover:bg-primary-600
 										cursor-pointer'
-									onClick={() => {
-										setApplicant(applicant);
-										setOpen(true);
-									}}
-								>
-									<div className='flex items-center space-x-4'>
-										<div className='flex-1 min-w-0'>
-											<p className='text-sm font-medium text-tc truncate dark:text-tc-300'>
-												{applicant.surname}, {applicant.name}
-											</p>
-											<p className='text-sm text-tc truncate dark:text-tc-700'>
-												{applicant.email}
-											</p>
-										</div>
-										<div className='inline-flex items-center text-base font-semibold text-tc dark:text-tc-300'>
-											{applicant.status}
-										</div>
-										<OpenIcon className='text-tc w-4 h-4' />
+								onClick={() => {
+									setApplicant(applicant);
+									setOpen(true);
+								}}
+							>
+								<div className='flex items-center space-x-4'>
+									<div className='flex-1 min-w-0'>
+										<p className='text-sm font-medium text-tc truncate dark:text-tc-300'>
+											{applicant.surname}, {applicant.name}
+										</p>
+										<p className='text-sm text-tc truncate dark:text-tc-700'>
+											{applicant.email}
+										</p>
 									</div>
-								</li>
-							))}
-						</ul>
-					);
-				})}
+									<div className='inline-flex items-center text-base font-semibold text-tc dark:text-tc-300'>
+										{applicant.status}
+									</div>
+									<OpenIcon className='text-tc w-4 h-4' />
+								</div>
+							</li>
+						));
+					})}
+				</ul>
 			</div>
 		);
 	};
@@ -90,7 +91,18 @@ const ApplicantsPage = () => {
 					Welcome to the applicants page. Here you can find all the submitted
 					applications.
 				</p>
-				<Searchbar />
+				<Searchbar
+					handleSubmit={() => {
+						console.log(applicant);
+					}}
+				/>
+				<PaginationMenu
+					offset={currentOffset}
+					size={size}
+					total={891}
+					callNextPage={list.fetchNextPage}
+					callPrevPage={list.fetchPreviousPage}
+				/>
 			</div>
 			<div className='flex flex-1 flex-col text-tc mt-10'>
 				<Application

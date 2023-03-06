@@ -1,5 +1,3 @@
-import Searchbar from './Searchbar';
-
 const Navbar = () => {
 	return (
 		<div className='fixed bg-primary-700 top-0 text-tc

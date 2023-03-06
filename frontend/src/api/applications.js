@@ -1,16 +1,17 @@
 import { API_URL } from '../config';
 import { api } from '../utils/api';
 
-export const fetchApplications = async () => {
+export const fetchApplications = async (offset=0, size=10) => {
 	return api
-		.get(`${API_URL}/api/applicants`)
+		.get(`${API_URL}/api/applicants?size=${size}&offset=${offset}&orderBy=asc`)
 		.then(({ data }) => {
+			data["size"] = size
 			return data;
 		})
 		.catch(console.error);
 };
 
-export const fetchApplication = async ({ queryKey }) => {
+export const fetchApplicant = async ({ queryKey }) => {
 	const [_key, { personId, include }] = queryKey;
 	if (!!personId) {
 		return api
