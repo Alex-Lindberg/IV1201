@@ -4,6 +4,7 @@ const RegisterForm = (props) => {
 	return (
 		<form
 			onSubmit={(e) => {
+				e.preventDefault();
 				props.handleSubmitRegister(e);
 			}}
 		>
