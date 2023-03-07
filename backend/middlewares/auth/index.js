@@ -84,7 +84,6 @@ const getUser = async (req, res, next) => {
   const { username, password } = req.body;
   try {
     const result = await authDAO.getUser(username, password);
-    console.log('result: ', result);
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -93,6 +92,7 @@ const getUser = async (req, res, next) => {
         })
       );
     }
+    res.locals.userExists = true;
     res.locals.outData.user = result[0];
     next();
   } catch (err) {

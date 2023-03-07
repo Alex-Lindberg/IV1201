@@ -33,10 +33,11 @@ const getUser = async (username, password) => {
   }
 };
 
-const getSession = async (session_id, person_id) => {
-  const query = `SELECT session_id, person_id, expiration_date FROM sessions WHERE session_id = $1 AND person_id = $2`;
+const getSession = async (person_id) => {
+  console.log('person_id', person_id);
+  const query = `SELECT session_id, person_id, expiration_date FROM sessions WHERE person_id = $1`;
   try {
-    const result = await sendQuery(query, [session_id, person_id]);
+    const result = await sendQuery(query, [person_id]);
     return result.rows;
   } catch (err) {
     throw err;
@@ -71,10 +72,10 @@ const checkIfUserExists = async (username) => {
   }
 };
 
-const refreshSession = async (session_id) => {
-  const query = `UPDATE sessions SET expiration_date = NOW() + INTERVAL '30 day' WHERE session_id = $1`;
+const refreshSession = async (person_id) => {
+  const query = `UPDATE sessions SET expiration_date = NOW() + INTERVAL '30 day' WHERE person_id = $1`;
   try {
-    await sendQuery(query, [session_id]);
+    await sendQuery(query, [person_id]);
   } catch (err) {
     throw err;
   }
