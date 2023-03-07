@@ -58,7 +58,8 @@ const createUser = async (req, res, next) => {
 
   const data = req.body;
   try {
-    res.locals.outData.user = await authDAO.createUser(data);
+    const result = await authDAO.createUser(data);
+    res.locals.outData.user = result;
     next();
   } catch (err) {
     console.error('Error in createUser: ', err.message);
