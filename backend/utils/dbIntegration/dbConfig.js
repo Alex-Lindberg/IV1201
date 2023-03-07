@@ -60,4 +60,18 @@ const sendQuery = async (query, queryParameters) => {
   }
 };
 
-module.exports = { sendQuery, connect };
+const sendCustomQuery = async (query, queryParameters) => {
+  let results = null;
+  try {
+    if (queryParameters) {
+      results = await client.query(query, queryParameters);
+      logChanges(query, queryParameters);
+    } else results = await client.query(query);
+    return results;
+  } catch (error) {
+    client.query('ROLLBACK');
+    throw error;
+  }
+};
+
+module.exports = { sendQuery, connect, sendCustomQuery };
