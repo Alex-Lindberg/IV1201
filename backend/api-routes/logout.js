@@ -17,4 +17,12 @@ module.exports.delete.apiDoc = {
       description: 'Successfully logged out',
     },
   },
+  parameters: [
+    {
+      $ref: '#/components/parameters/personId',
+    },
+    {
+      $ref: '#/components/parameters/sessionId',
+    },
+  ],
 };
