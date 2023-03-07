@@ -32,7 +32,7 @@ module.exports = {
 	orderBy: {
 		name: 'orderBy',
 		in: 'query',
-		description: 'A string to order the applicants by defaults to "DESC"',
+		description: 'A string to order the applicants by defaults to "desc"',
 		schema: {
 			type: 'string',
 			enum: ['asc', 'desc'],
@@ -45,8 +45,8 @@ module.exports = {
 		description: 'A column name to filter the applicants by',
 		schema: {
 			type: 'string',
-			enum: ['surname'], // TODO: to be implemented 'name', , 'pnr', 'email', 'username'
-			example: 'name',
+			enum: ['surname'],
+			example: 'surname',
 		},
 	},
 	offset: {
