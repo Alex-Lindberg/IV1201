@@ -65,7 +65,7 @@ const checkIfUserExists = async (username) => {
   const query = `SELECT person_id FROM person WHERE username = $1`;
   try {
     const result = await sendQuery(query, [username]);
-    return result.rows[0];
+    return !!result.rows[0];
   } catch (err) {
     throw err;
   }

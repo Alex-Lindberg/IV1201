@@ -47,6 +47,15 @@ const authorize = async (req, res, next) => {
  * @returns The user object is being returned.
  */
 const createUser = async (req, res, next) => {
+  if (res.locals.userExists) {
+    return next(
+      errorCodes.badRequest({
+        req,
+        message: 'User already exists',
+      })
+    );
+  }
+
   const data = req.body;
   try {
     res.locals.outData.user = await authDAO.createUser(data);
@@ -75,6 +84,7 @@ const getUser = async (req, res, next) => {
   const { username, password } = req.body;
   try {
     const result = await authDAO.getUser(username, password);
+    console.log('result: ', result);
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -107,6 +117,7 @@ const getSession = async (req, res, next) => {
   const { session_id, person_id } = req.headers;
   try {
     const result = await authDAO.getSession(session_id, person_id);
+    console.log('session: ', result);
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -133,7 +144,7 @@ const getSession = async (req, res, next) => {
 const createSession = async (req, res, next) => {
   const { person_id } = res.locals.outData.user;
   try {
-    if (await userExists(person_id)) {
+    if (res.locals.userExists) {
       res.locals.outData.session = await authDAO.getSession(person_id);
       await authDAO.refreshSession(person_id);
       return next();
@@ -184,9 +195,9 @@ const deleteSession = async (req, res, next) => {
  * @returns a function that is being used as middleware.
  */
 const checkIfSessionExists = async (req, res, next) => {
-  const { session_id, person_id } = req.headers;
+  const { person_id } = req.headers;
   try {
-    const result = await authDAO.getSession(session_id, person_id);
+    const result = await authDAO.getSession( person_id );
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -203,21 +214,10 @@ const checkIfSessionExists = async (req, res, next) => {
 };
 
 const userExists = async (req, res, next) => {
-  const { username } = req.body;
+  const { username } = req.body || req.headers;
   try {
-    const result = await authDAO.checkIfUserExists(username);
-    if (result.length === 0) {
-      return next(
-        errorCodes.unauthorized({
-          req,
-          message: `User with username: ${username} not found`,
-        })
-      );
-    }
+    res.locals.userExists = await authDAO.checkIfUserExists(username);
     next();
-    res.locals.userExists = !!result.length > 0;
-    //Hämtar användare in result
-    //res.locals.userExists = results.length > 0
   } catch (err) {
     console.error('Error in checkIfUserExists: ', err.message);
   }
@@ -231,4 +231,6 @@ module.exports = {
   getUser,
   deleteSession,
   checkIfSessionExists,
+  userExists,
+  getSession,
 };
