@@ -35,8 +35,8 @@ const authorize = async (req, res, next) => {
       })
     );
   }
-
-  next();
+  await authDAO.refreshSession(res.locals.outData.session.person_id);
+  return next();
 };
 
 /**
@@ -115,10 +115,9 @@ const getUser = async (req, res, next) => {
  * @returns The session object is being returned.
  */
 const getSession = async (req, res, next) => {
-  const { session_id, person_id } = req.headers;
+  const { session_id, person_id } = req.body ? req.body : req.headers;
   try {
-    const result = await authDAO.getSession(session_id, person_id);
-    console.log('session: ', result);
+    const result = await authDAO.getSession(person_id, session_id);
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -196,9 +195,9 @@ const deleteSession = async (req, res, next) => {
  * @returns a function that is being used as middleware.
  */
 const checkIfSessionExists = async (req, res, next) => {
-  const { person_id } = req.headers;
+  const { session_id } = req.headers;
   try {
-    const result = await authDAO.getSession( person_id );
+    const result = await authDAO.getSession(session_id);
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -207,7 +206,8 @@ const checkIfSessionExists = async (req, res, next) => {
         })
       );
     }
-    next();
+    res.locals.outData.session = result[0];
+    return next();
   } catch (err) {
     console.error('Error in checkIfSessionExists: ', err.message);
     return next(errorCodes.serverError({ req, message: 'Could not get session' }));

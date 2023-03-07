@@ -33,11 +33,13 @@ const getUser = async (username, password) => {
   }
 };
 
-const getSession = async (person_id) => {
-  console.log('person_id', person_id);
-  const query = `SELECT session_id, person_id, expiration_date FROM sessions WHERE person_id = $1`;
+const getSession = async (person_id, session_id) => {
+  const queryParameters = session_id ? [person_id, session_id] : [person_id];
+  const query = session_id
+    ? `SELECT session_id, person_id, expiration_date FROM sessions WHERE person_id = $1 AND session_id = $2`
+    : `SELECT session_id, person_id, expiration_date FROM sessions WHERE person_id = $1`;
   try {
-    const result = await sendQuery(query, [person_id]);
+    const result = await sendQuery(query, queryParameters);
     return result.rows;
   } catch (err) {
     throw err;
