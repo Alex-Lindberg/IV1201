@@ -17,15 +17,8 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-const encryptPasswords = async (client)=> {
-  client.query(
-    `UPDATE public.person SET password = crypt('password', gen_salt('bf')) WHERE password IS NOT NULL`
-  );
-}
-
 const connect = async () => {
   client.connect();
-  await encryptPasswords(client);
 };
 
 const logChanges = (query, queryParameters) => {
