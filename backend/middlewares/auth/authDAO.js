@@ -61,6 +61,24 @@ const deleteSession = async (session_id) => {
     throw err;
   }
 };
+const checkIfUserExists = async (username) => {
+  const query = `SELECT person_id FROM person WHERE username = $1`;
+  try {
+    const result = await sendQuery(query, [username]);
+    return result.rows[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
+const refreshSession = async (session_id) => {
+  const query = `UPDATE sessions SET expiration_date = NOW() + INTERVAL '30 day' WHERE session_id = $1`;
+  try {
+    await sendQuery(query, [session_id]);
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports = {
   authDAO: {
@@ -69,5 +87,7 @@ module.exports = {
     getSession,
     getUser,
     deleteSession,
+    checkIfUserExists,
+    refreshSession,
   },
 };

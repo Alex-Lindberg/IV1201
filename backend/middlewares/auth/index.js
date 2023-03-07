@@ -118,7 +118,6 @@ const getSession = async (req, res, next) => {
     res.locals.outData.session = result[0];
     next();
   } catch (err) {
-    console.log('🚀 ~ file: index.js:87 ~ getSession ~ err:', err);
     console.error('Error in getSession: ', err.message);
     return next(errorCodes.serverError({ req, message: 'Could not get session' }));
   }
@@ -134,9 +133,13 @@ const getSession = async (req, res, next) => {
 const createSession = async (req, res, next) => {
   const { person_id } = res.locals.outData.user;
   try {
-    const result = await authDAO.createSession(person_id);
-    res.locals.outData.session = result;
-    next();
+    if (await userExists(person_id)) {
+      res.locals.outData.session = await authDAO.getSession(person_id);
+      await authDAO.refreshSession(person_id);
+      return next();
+    }
+    res.locals.outData.session = await authDAO.createSession(person_id);
+    return next();
   } catch (err) {
     console.error('Error in createSession: ', err.message);
     return next(
@@ -196,6 +199,27 @@ const checkIfSessionExists = async (req, res, next) => {
   } catch (err) {
     console.error('Error in checkIfSessionExists: ', err.message);
     return next(errorCodes.serverError({ req, message: 'Could not get session' }));
+  }
+};
+
+const userExists = async (req, res, next) => {
+  const { username } = req.body;
+  try {
+    const result = await authDAO.checkIfUserExists(username);
+    if (result.length === 0) {
+      return next(
+        errorCodes.unauthorized({
+          req,
+          message: `User with username: ${username} not found`,
+        })
+      );
+    }
+    next();
+    res.locals.userExists = !!result.length > 0;
+    //Hämtar användare in result
+    //res.locals.userExists = results.length > 0
+  } catch (err) {
+    console.error('Error in checkIfUserExists: ', err.message);
   }
 };
 
