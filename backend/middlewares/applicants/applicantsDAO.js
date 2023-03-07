@@ -9,26 +9,34 @@ const roleMap = {
 };
 
 const getApplicants = async (filterString, orderBy, filterBy, offset, size) => {
-	if (!!filterString) {
-	}
 
+	// const countQuery = `SELECT COUNT(*) FROM person WHERE role_id = $1
+	// ${!!filterString ? `AND surname LIKE '%' || $2 || '%'` : ''}`;
+	console.log('filterString', filterString);
+	console.log('filterBy', filterBy);
 	const query =
-		!!filterString && !!filterBy
-			? `
-	SELECT person_id, name, surname, pnr, email, username
-	 FROM person
-	 WHERE
-	   role_id = $1 AND
-      (${filterBy} LIKE '%' || $2 || '%' OR true)
-	   ORDER BY ${filterBy} ${orderBy}`
-			: `SELECT person_id, name, surname, pnr, email, username FROM person WHERE role_id = $1 ORDER BY person_id ${
-					orderBy ?? 'DESC'
-			  }`;
+		!!filterString && !!filterBy ?
+		`SELECT person_id, name, surname, pnr, email, username
+	 		FROM person
+	 		WHERE
+	   	role_id = $1 AND
+	   	surname LIKE '%' || $2 || '%'
+		  ORDER BY surname ${orderBy ? orderBy : 'DESC'}`
+			:
+			`
+		SELECT person_id, name, surname, pnr, email, username
+	 		FROM person
+	 		WHERE
+	   	role_id = $1
+	   	ORDER BY person_id ${orderBy ? orderBy : 'DESC'};
+			`
+
 	try {
 		const queryParameters =
 			!!filterString && !!filterBy
 				? [roleMap.applicant, filterString]
 				: [roleMap.applicant];
+		// const countResult = await sendQuery(countQuery, queryParameters);
 		const result = await sendQuery(query, queryParameters);
 		const applicants = !size
 			? result.rows

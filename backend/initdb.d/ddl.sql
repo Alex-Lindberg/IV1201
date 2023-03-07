@@ -4920,5 +4920,8 @@ alter table public.sessions
 ALTER TABLE public.person
 ADD CONSTRAINT constraint_name UNIQUE (email);
 
+alter table public.person
+    add unique (username);
+
 alter table public.sessions
     alter column session_id set default gen_random_uuid();
