@@ -23,17 +23,20 @@ const createUser = async (applicant) => {
   }
 };
 
-const getUser = async (username, password) => {
-  const query = `SELECT person_id, name, surname, pnr, email, username, role_id FROM person WHERE username = $1 AND password = crypt($2, password)`;
+const getUser = async (username, password = null) => {
+  const query = password
+    ? `SELECT person_id, name, surname, pnr, email, username, role_id FROM person WHERE username = $1 AND password = crypt($2, password)`
+    : `SELECT person_id, name, surname, pnr, email, username, role_id FROM person WHERE username = $1`;
+  const queryParams = password ? [username, password] : [username];
   try {
-    const result = await sendQuery(query, [username, password]);
+    const result = await sendQuery(query, queryParams);
     return result.rows;
   } catch (err) {
     throw err;
   }
 };
 
-const getSession = async (person_id, session_id) => {
+const getSession = async (person_id, session_id = null) => {
   const queryParameters = session_id ? [person_id, session_id] : [person_id];
   const query = session_id
     ? `SELECT session_id, person_id, expiration_date FROM sessions WHERE person_id = $1 AND session_id = $2`

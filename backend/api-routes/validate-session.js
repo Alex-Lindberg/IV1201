@@ -6,7 +6,7 @@ module.exports = {
     auth.initLocals,
     auth.authorize,
     auth.getRole,
-    responseMiddleware.sendResponse(201, 'outData'),
+    responseMiddleware.sendResponse(200, 'outData'),
   ],
 };
 
@@ -24,7 +24,7 @@ module.exports.post.apiDoc = {
     },
   },
   responses: {
-    201: {
+    200: {
       description: 'Successfully validated session',
       content: {
         'application/json': {

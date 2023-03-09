@@ -217,7 +217,7 @@ const checkIfSessionExists = async (req, res, next) => {
   }
 };
 
-const userExists = async (req, res, next) => {
+const checkIfUserExists = async (req, res, next) => {
   const { username } = req.body || req.headers;
   try {
     res.locals.userExists = await authDAO.checkIfUserExists(username);
@@ -246,7 +246,7 @@ module.exports = {
   getUser,
   deleteSession,
   checkIfSessionExists,
-  userExists,
+  checkIfUserExists,
   getSession,
   getRole,
 };
