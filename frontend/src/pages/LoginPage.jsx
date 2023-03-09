@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader, LoginForm, RegisterForm } from '../components';
 import { queryLogin } from '../lib/reactQuery';
 import { useAuth } from '../utils/AuthUtils';
 
 const LoginPage = () => {
 	const user = useAuth();
-	const login = queryLogin();
+	const loginMutation = queryLogin();
 
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -17,18 +17,22 @@ const LoginPage = () => {
 
 	const handleSubmitLogin = async () => {
 		if (!username || !password) return;
-		await login.mutateAsync({ username: username, password: password });
+		await loginMutation.mutateAsync({ username: username, password: password });
 	};
 
 	const handleSubmitRegister = () => {
 		console.log('Register');
 	};
 
-	return login.isSuccess ? (
-		user.login(login.data)
-	) : (
+	useEffect(()=> {
+		if (loginMutation.isSuccess) {
+			user.login(loginMutation.data);
+		}
+	}, [loginMutation.isSuccess])
+
+	return (
 		<div className='bg-primary flex flex-col min-h-screen text-tc'>
-			{login.isLoading ? (
+			{loginMutation.isLoading ? (
 				<>
 					<div
 						id='backdrop'
@@ -36,12 +40,12 @@ const LoginPage = () => {
 					/>
 					<Loader />
 				</>
-			) : login.isError ? (
+			) : loginMutation.isError ? (
 				<>
 					<span className='md:mt-24'>
 						The server seems to have problems, Try reloading!
 					</span>
-					{login?.error?.message && <span>Error: {login.error.message}</span>}
+					{loginMutation?.error?.message && <span>Error: {loginMutation.error.message}</span>}
 				</>
 			) : (
 				''
