@@ -75,3 +75,12 @@ export const queryApplications = (offset = 0, size = 10) =>
 			return Math.max(offset - size, 0);
 		},
 	});
+
+export const validateSession = (sessionId, personId) =>
+	useMutation({
+		mutationKey: ['validateSession'],
+		mutationFn: async ({ sessionId	, personId }) => {
+			return validateSession({ sessionId, personId });
+		},
+		suspend: true,
+	});

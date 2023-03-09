@@ -66,3 +66,26 @@ export const logout = async () => {
 			return true;
 		});
 };
+
+export const validateSession = async (personId, sessionId) => {
+	return api
+		.post(`${API_URL}/api/validate-session`,
+			{
+				person_id: personId,
+				session_id: sessionId,
+			})
+.then(({ data }) => {
+			if (!!data?.session?.session_id && !!data?.user?.person_id) {
+				console.log(`🚮 | file: auth.js:799999 | .then | data:`, data)
+				api.setUser(
+					data?.session?.person_id,
+					data?.session?.session_id,
+					data?.role?.role_id
+				);
+			}
+			return data;
+		})
+		.catch((err) => {
+			return Promise.reject(err);
+		});
+}

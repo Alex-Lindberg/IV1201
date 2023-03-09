@@ -2,12 +2,12 @@ import { Navigate, useLocation, useOutlet } from 'react-router-dom';
 import { Footer, Navbar } from '../components';
 import { api } from '../utils/api';
 import { useAuth } from '../utils/AuthUtils';
+import {validateSession} from "../lib/reactQuery.js";
 
 const ProtectedLayout = ({ redirectPath = '/', role }) => {
 	const user = useAuth();
-
+	// const sessionValidation = validateSession();
 	const isAuthenticated = (session) => {
-		// validate session through api call to /api/validateSession
 		if (!!session?.session_id && !!session?.person_id) {
 			api.setUser(session.person_id, session.session_id, session.role_id)
 			return true;
