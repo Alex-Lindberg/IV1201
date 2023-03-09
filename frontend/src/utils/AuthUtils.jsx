@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks';
 import { api } from './api';
 import { roleMap } from './roles';
@@ -8,7 +8,6 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [session, setSession] = useLocalStorage('session', null);
-	const navigate = useNavigate();
 
 	const login = (data) => {
 		setSession({
@@ -17,27 +16,19 @@ export const AuthProvider = ({ children }) => {
 			role_id: data.user.role_id,
 		});
 		api.setUser(data.person_id, data.session_id, data.role_id);
-		if (data.role_id === roleMap.recruiter) {
-			return <Navigate to='app/applicants' />;
-		} else if (data.role_id === roleMap.applicant) {
-			return <Navigate to='app/applicants' />;
-		}
+		
 	};
 
 	const validate = async (data) => {
 		// @TODO: use api validation
 		api.setUser(data.person_id, data.session_id, data.role_id);
-		if (data.role_id === roleMap.recruiter) {
-			return <Navigate to='app/applicants' />;
-		} else if (data.role_id === roleMap.applicant) {
-			return <Navigate to='app/applicants' />;
-		}
+		
 	};
 
 	const logout = () => {
 		setSession(null);
 		api.setUser(null, null, null);
-		return <Navigate to='/' replace />
+		return <Navigate to='/' replace />;
 	};
 
 	const value = useMemo(

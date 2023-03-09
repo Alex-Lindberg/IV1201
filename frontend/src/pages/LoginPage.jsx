@@ -1,38 +1,84 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Loader, LoginForm, RegisterForm } from '../components';
-import { queryLogin } from '../lib/reactQuery';
+import useTimedMessage from '../hooks/useTimedMessage';
+import { queryLogin, querySignup } from '../lib/reactQuery';
 import { useAuth } from '../utils/AuthUtils';
 
 const LoginPage = () => {
 	const user = useAuth();
 	const loginMutation = queryLogin();
+	const signupMutation = querySignup();
+	const navigate = useNavigate();
 
+	const [name, setName] = useState('');
+	const [surname, setSurname] = useState('');
+	const [pnr, setPnr] = useState('');
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
 	const [password, setPassword] = useState('');
-	const [passwordConfirm, setPasswordConfirm] = useState('');
-	const [error, setError] = useState('');
+	const [password2, setPassword2] = useState('');
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+	const [error, showError, setError] = useTimedMessage(5000);
 
 	const handleSubmitLogin = async () => {
 		if (!username || !password) return;
-		await loginMutation.mutateAsync({ username: username, password: password });
+		await loginMutation
+			.mutateAsync({ username: username, password: password })
+			.then((data) => {
+				user.login(data);
+				setIsAuthenticated(true);
+			})
+			.catch(console.error);
 	};
 
-	const handleSubmitRegister = () => {
-		console.log('Register');
-	};
-
-	useEffect(()=> {
-		if (loginMutation.isSuccess) {
-			user.login(loginMutation.data);
+	const handleSubmitRegister = async () => {
+		if (
+			![name, surname, pnr, email, username, password, password2].every(
+				(field) => field !== ''
+			)
+		) {
+			setError('Please fill out all fields');
+			return;
 		}
-	}, [loginMutation.isSuccess])
+		if (password !== password2) {
+			setError('Passwords do not match');
+			return;
+		}
+		await signupMutation
+			.mutateAsync({
+				name: name,
+				surname: surname,
+				pnr: pnr,
+				email: email,
+				username: username,
+				password: password,
+			})
+			.then((data) => {
+				user.login(data);
+				setIsAuthenticated(true);
+			})
+			.catch(console.error);
+	};
+
+	useEffect(() => {
+		if (
+			(!!loginMutation.isSuccess || !!signupMutation.isSuccess) &&
+			!!user.session &&
+			isAuthenticated
+		) {
+			if (data.role_id === roleMap.recruiter) {
+				navigate('app/applicants');
+			} else if (data.role_id === roleMap.applicant) {
+				navigate('app/form');
+			}
+		}
+	}, [isAuthenticated]);
 
 	return (
 		<div className='bg-primary flex flex-col min-h-screen text-tc'>
-			{loginMutation.isLoading ? (
+			{loginMutation.isLoading || signupMutation.isLoading ? (
 				<>
 					<div
 						id='backdrop'
@@ -40,15 +86,24 @@ const LoginPage = () => {
 					/>
 					<Loader />
 				</>
-			) : loginMutation.isError ? (
+			) : loginMutation.isError || signupMutation.isError ? (
 				<>
 					<span className='md:mt-24'>
 						The server seems to have problems, Try reloading!
 					</span>
-					{loginMutation?.error?.message && <span>Error: {loginMutation.error.message}</span>}
+					{loginMutation?.error?.message && (
+						<span>Error: {loginMutation.error.message}</span>
+					)}
+					{signupMutation?.error?.message && (
+						<span>Error: {signupMutation.error.message}</span>
+					)}
 				</>
+			) : showError ? (
+				<div>
+					<span className='md:mt-24'>{error}</span>
+				</div>
 			) : (
-				''
+				<></>
 			)}
 
 			<LoginForm
@@ -61,16 +116,20 @@ const LoginPage = () => {
 			<div className='border-2 border-tc my-3'></div>
 			<RegisterForm
 				handleSubmitRegister={handleSubmitRegister}
+				name={name}
+				setName={setName}
+				surname={surname}
+				setSurname={setSurname}
+				pnr={pnr}
+				setPnr={setPnr}
 				email={email}
 				setEmail={setEmail}
-				firstName={firstName}
-				setFirstName={setFirstName}
-				lastName={lastName}
-				setLastName={setLastName}
+				username={username}
+				setUsername={setUsername}
 				password={password}
 				setPassword={setPassword}
-				passwordConfirm={passwordConfirm}
-				setPasswordConfirm={setPasswordConfirm}
+				password2={password2}
+				setPassword2={setPassword2}
 			/>
 		</div>
 	);

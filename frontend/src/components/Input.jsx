@@ -5,6 +5,7 @@ const Input = ({
 	value = '',
 	placeholder = '',
 	dataType = 'text',
+	required = false,
 }) => {
 	return (
 		<div
@@ -18,6 +19,7 @@ const Input = ({
 				type={dataType}
 				className='text-primary'
 				value={value}
+				required={required}
 				onChange={onChange}
 				placeholder={placeholder}
 			/>

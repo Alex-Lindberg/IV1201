@@ -1,11 +1,21 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import { fetchApplicant, fetchApplications, login, logout } from '../api';
+import { signup } from '../api/auth';
 
 export const queryLogin = () =>
 	useMutation({
 		mutationKey: ['Login'],
 		mutationFn: async ({ username, password }) => {
 			return login({ username, password });
+		},
+		suspend: true,
+	});
+
+export const querySignup = () =>
+	useMutation({
+		mutationKey: ['Signup'],
+		mutationFn: async ({ name, surname, pnr, email, username, password }) => {
+			return signup({ name, surname, pnr, email, username, password });
 		},
 		suspend: true,
 	});
