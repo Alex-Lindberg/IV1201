@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAtom } from 'jotai';
+import { useState } from 'react';
 import { Loader, LoginForm, RegisterForm } from '../components';
-import handleLogin from '../lib/jotai';
-import { api } from '../utils/api';
+import { queryLogin } from '../lib/reactQuery';
+import { useAuth } from '../utils/AuthUtils';
 
 const LoginPage = () => {
-	const navigate = useNavigate();
-	const [login, mutateLogin] = useAtom(handleLogin);
+	const user = useAuth();
+	const login = queryLogin();
 
 	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
@@ -18,20 +16,17 @@ const LoginPage = () => {
 	const [error, setError] = useState('');
 
 	const handleSubmitLogin = async () => {
-		console.log('Loging in user', { username: username, password: password });
 		if (!username || !password) return;
-		await mutateLogin([{ username: username, password: password }]);
-		if (login.isSuccess) {
-			api.setUser(login.data?.user?.person_id, login.data?.session?.session_id);
-			navigate('/app/applicants');
-		}
+		await login.mutateAsync({ username: username, password: password });
 	};
 
 	const handleSubmitRegister = () => {
 		console.log('Register');
 	};
 
-	return (
+	return login.isSuccess ? (
+		user.login(login.data)
+	) : (
 		<div className='bg-primary flex flex-col min-h-screen text-tc'>
 			{login.isLoading ? (
 				<>
