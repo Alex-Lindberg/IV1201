@@ -2,7 +2,12 @@ const auth = require('../middlewares/auth'),
   responseMiddleware = require('../middlewares/response');
 
 module.exports = {
-  post: [auth.initLocals, auth.authorize, responseMiddleware.sendResponse(201, 'outData')],
+  post: [
+    auth.initLocals,
+    auth.authorize,
+    auth.getRole,
+    responseMiddleware.sendResponse(201, 'outData'),
+  ],
 };
 
 module.exports.post.apiDoc = {
@@ -24,7 +29,7 @@ module.exports.post.apiDoc = {
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/Session',
+            $ref: '#/components/schemas/SessionsValidationResponse',
           },
         },
       },

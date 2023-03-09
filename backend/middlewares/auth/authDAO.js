@@ -83,6 +83,16 @@ const refreshSession = async (person_id) => {
   }
 };
 
+const getRole = async (person_id) => {
+  const query = `SELECT role_id FROM person WHERE person_id = $1`;
+  try {
+    const result = await sendQuery(query, [person_id]);
+    return result.rows[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   authDAO: {
     createUser,
@@ -92,5 +102,6 @@ module.exports = {
     deleteSession,
     checkIfUserExists,
     refreshSession,
+    getRole,
   },
 };

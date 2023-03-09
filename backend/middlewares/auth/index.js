@@ -55,11 +55,10 @@ const createUser = async (req, res, next) => {
       })
     );
   }
-
   const data = req.body;
   try {
-    const result = await authDAO.createUser(data);
-    res.locals.outData.user = result;
+    res.locals.outData.user = await authDAO.createUser(data);
+    res.locals.userExists = true;
     next();
   } catch (err) {
     console.error('Error in createUser: ', err.message);
@@ -144,13 +143,17 @@ const getSession = async (req, res, next) => {
 const createSession = async (req, res, next) => {
   const { person_id } = res.locals.outData.user;
   try {
-    if (res.locals.userExists) {
+    if (!!res.locals.userExists) {
       res.locals.outData.session = await authDAO.getSession(person_id);
-      await authDAO.refreshSession(person_id);
+      if (!!res.locals.outData.session && res.locals.outData.session.length > 0) {
+        await authDAO.refreshSession(person_id);
+        return next();
+      }
+      res.locals.outData.session = await authDAO.createSession(person_id);
       return next();
+    } else {
+      throw new Error('User does not exist');
     }
-    res.locals.outData.session = await authDAO.createSession(person_id);
-    return next();
   } catch (err) {
     console.error('Error in createSession: ', err.message);
     return next(
@@ -224,6 +227,17 @@ const userExists = async (req, res, next) => {
   }
 };
 
+const getRole = async (req, res, next) => {
+  const { person_id } = req.body ? req.body : req.headers;
+  console.log('person_id: ', person_id);
+  try {
+    res.locals.outData.role = await authDAO.getRole(person_id);
+    next();
+  } catch (err) {
+    console.error('Error in getRole: ', err.message);
+  }
+};
+
 module.exports = {
   initLocals,
   authorize: [getSession, authorize],
@@ -234,4 +248,5 @@ module.exports = {
   checkIfSessionExists,
   userExists,
   getSession,
+  getRole,
 };
