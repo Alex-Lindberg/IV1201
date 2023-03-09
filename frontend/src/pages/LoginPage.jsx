@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader, LoginForm, RegisterForm } from '../components';
 import useTimedMessage from '../hooks/useTimedMessage';
-import { queryLogin, querySignup } from '../lib/reactQuery';
+import { mutateLogin, mutateSignup } from '../lib/reactQuery';
 import { useAuth } from '../utils/AuthUtils';
 
 const LoginPage = () => {
 	const user = useAuth();
-	const loginMutation = queryLogin();
-	const signupMutation = querySignup();
+	const loginMutation = mutateLogin();
+	const signupMutation = mutateSignup();
 	const navigate = useNavigate();
 
 	const [name, setName] = useState('');

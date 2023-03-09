@@ -1,11 +1,11 @@
 import { Await } from 'react-router-dom';
-import { queryLogout } from '../lib/reactQuery';
+import { mutateLogout } from '../lib/reactQuery';
 import { useAuth } from '../utils/AuthUtils';
 
 const LogoutButton = () => {
 
 	const user = useAuth();
-	const logout = queryLogout();
+	const logout = mutateLogout();
 
 	const handleLogout = async (e) => {
 		await logout.mutateAsync();
