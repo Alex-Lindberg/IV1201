@@ -22,3 +22,13 @@ export const fetchApplicant = async ({ queryKey }) => {
 			.catch(console.error);
 	}
 };
+
+export const submitApplication = async () => {
+	return api
+		.post(`${API_URL}/api/applications`)
+		.then(({ data }) => {
+			
+			return data;
+		})
+		.catch(console.error);
+}
