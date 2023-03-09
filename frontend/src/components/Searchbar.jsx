@@ -1,11 +1,12 @@
 import { SortIcon, SearchIcon } from '../assets';
 
-const Searchbar = ({dropdownOptions, handleSubmit}) => {
+const Searchbar = ({handleSubmit}) => {
 	return (
 		<form
 			className='flex flex-row items-center'
 			onSubmit={(e) => {
 				e.preventDefault();
+				handleSubmit(e.target.value);
 			}}
 		>
 			<div className='flex'>
@@ -29,10 +30,8 @@ const Searchbar = ({dropdownOptions, handleSubmit}) => {
 					defaultValue="Sort By"
 				>
 					<option className=' text-primary-500' value='select-default'>Sort by</option>
-					<option value='name-asc'>Name asc</option>
-					<option value='name-desc'>Name desc</option>
-					<option value='date-asc'>Date asc</option>
-					<option value='date-desc'>Date desc</option>
+					<option value='name-asc'>Surname asc</option>
+					<option value='name-desc'>Surname desc</option>
 				</select>
 				<div className='relative w-full'>
 					<input
@@ -48,7 +47,7 @@ const Searchbar = ({dropdownOptions, handleSubmit}) => {
 						placeholder='Search'
 						required
 					/>
-					<span
+					{/* <span
 						className='
                             absolute top-0 right-0 p-5 
                             text-sm font-medium text-tc
@@ -57,7 +56,7 @@ const Searchbar = ({dropdownOptions, handleSubmit}) => {
 					>
 						<SearchIcon />
 						<span className='sr-only'>Search</span>
-					</span>
+					</span> */}
 				</div>
 			</div>
 		</form>

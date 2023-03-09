@@ -1,28 +1,34 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Await } from 'react-router-dom';
+import { queryLogout } from '../lib/reactQuery';
+import { useAuth } from '../utils/AuthUtils';
 
-const LogoutButton = ({ session }) => {
-	const navigate = useNavigate();
+const LogoutButton = () => {
 
-	const handleLogout = () => {
-		// @TODO: handle logout
+	const user = useAuth();
+	const logout = queryLogout();
+
+	const handleLogout = async (e) => {
+		await logout.mutateAsync();
+		user.logout(logout.data);
 	};
 
-	useEffect(() => {
-		// @TODO: if user session exists
-		if (!!session) {
-			navigate('/login');
-		}
-	}, []);
-
 	return (
-		<button
-			id='logout-button'
-			className=''
-			onClick={() => console.log('Handling logout')}
-		>
-			Logout
-		</button>
+		<>
+			{logout.isError && (
+				<div className='absolute h-1/2 w-1/2 border-2 border-red p-10'>
+					Error: {logout.error}
+				</div>
+			)}
+			<Await>
+			<button
+				id='logout-button'
+				className='border-2 rounded-full px-3 py-1 border-primary-400'
+				onClick={handleLogout}
+			>
+				Logout
+			</button>
+			</Await>
+		</>
 	);
 };
 

@@ -1,19 +1,25 @@
 import React from 'react';
-import Input from './input';
+import Input from './Input';
 
 const LoginForm = ({
 	handleSubmitLogin,
-	email,
-	setEmail,
+	username,
+	setUsername,
 	password,
 	setPassword,
 }) => {
 	return (
-		<form onSubmit={(e) => handleSubmitLogin(e)} className='sign-in-html'>
+		<form
+			onSubmit={(e) => {
+				e.preventDefault();
+				handleSubmitLogin(e);
+			}}
+			className='sign-in-html'
+		>
 			<Input
-				label={'Email'}
-				value={email}
-				onChange={(e) => setEmail(e.target.value)}
+				label={'Username'}
+				value={username}
+				onChange={(e) => setUsername(e.target.value)}
 			/>
 			<Input
 				label='Password'
