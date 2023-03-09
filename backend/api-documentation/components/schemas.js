@@ -52,6 +52,11 @@ module.exports = {
     format: 'uuid',
     example: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
   },
+  DateTime: {
+    type: 'string',
+    format: 'date-time',
+    example: '2017-07-21T17:32:28Z',
+  },
   Competence: {
     type: 'object',
     additionalProperties: false,
@@ -228,7 +233,6 @@ module.exports = {
       },
     },
   },
-
   LoginData: {
     type: 'object',
     additionalProperties: false,
@@ -248,7 +252,6 @@ module.exports = {
       },
     },
   },
-
   Session: {
     type: 'object',
     additionalProperties: false,
@@ -261,7 +264,7 @@ module.exports = {
         $ref: '#/components/schemas/GenericId',
       },
       expiration_date: {
-        type: 'string',
+        $ref: '#/components/schemas/DateTime',
       },
     },
   },
@@ -288,6 +291,39 @@ module.exports = {
       },
       person_id: {
         $ref: '#/components/schemas/GenericId',
+      },
+    },
+  },
+  SessionsValidationResponse: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['session'],
+    properties: {
+      session: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['session_id', 'person_id', 'expiration_date'],
+        properties: {
+          session_id: {
+            $ref: '#/components/schemas/Uuid',
+          },
+          person_id: {
+            $ref: '#/components/schemas/GenericId',
+          },
+          expiration_date: {
+            $ref: '#/components/schemas/DateTime',
+          },
+        },
+      },
+      role: {
+        type: 'object',
+        additionalProperties: false,
+        required: ['role_id'],
+        properties: {
+          role_id: {
+            $ref: '#/components/schemas/GenericId',
+          },
+        },
       },
     },
   },
