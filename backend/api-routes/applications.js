@@ -5,10 +5,9 @@ const auth = require('../middlewares/auth'),
 module.exports = {
   post: [
     auth.initLocals,
-    // auth.authorize,
+    auth.authorize,
     applicationsMiddleware.initLocals,
-    applicationsMiddleware.insertAvailabilities,
-    applicationsMiddleware.commitQueries,
+    applicationsMiddleware.insertApplication,
     responseMiddleware.sendResponse(201, 'application'),
   ],
 };
@@ -44,8 +43,8 @@ module.exports.post.apiDoc = {
     {
       $ref: '#/components/parameters/personId',
     },
-    // {
-    //   $ref: '#/components/parameters/sessionId',
-    // },
+    {
+      $ref: '#/components/parameters/sessionId',
+    },
   ],
 };
