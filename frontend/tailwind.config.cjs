@@ -13,19 +13,20 @@ module.exports = {
 		'./src/pages/*.{js,jsx,ts,tsx}',
 		'./src/components/*.{js,jsx,ts,tsx}',
 		'./src/*.{js,jsx,ts,tsx}',
+		'./node_modules/tailwind-datepicker-react/dist/**/*.js',
 	],
 	theme: {
-		screens: {
-			sm: '390px', // iPhone 12/13+, SG20 @ 384px
-			md: '780px', // Pads
-			lg: '1024px',
-			xl: '1280px',
-		},
 		fontFamily: {
 			sans: ['Graphik', 'sans-serif'],
 			serif: ['Merriweather', 'serif'],
 		},
 		extend: {
+			screens: {
+				sm: '390px', // iPhone 12/13+, SG20 @ 384px
+				md: '780px', // Pads
+				lg: '1024px',
+				xl: '1280px',
+			},
 			colors: {
 				primary: {
 					DEFAULT: '#353535',

@@ -8,7 +8,7 @@ import {
 	defer,
 } from 'react-router-dom';
 import { AuthLayout, HomeLayout, ProtectedLayout } from './layouts';
-import { ApplicantsPage, HomePage, LoginPage } from './pages';
+import { ApplicantsPage, HomePage, LoginPage, SubmissionPage } from './pages';
 import { getUserData } from './utils/AuthUtils';
 import { ErrorBoundary, LogoutButton } from './components';
 import { roleMap } from './utils/roles';
@@ -31,11 +31,7 @@ const router = createBrowserRouter(
 				<Route element={<ProtectedLayout role={roleMap.applicant} />}>
 					<Route
 						path='form'
-						element={
-							<div>
-								NOT IMPLEMENTED <LogoutButton />
-							</div>
-						}
+						element={<SubmissionPage />}
 					/>
 				</Route>
 			</Route>
