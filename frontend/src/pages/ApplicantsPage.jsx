@@ -4,8 +4,8 @@ import { OpenIcon, Spinner } from '../assets';
 import { queryApplications } from '../lib/reactQuery';
 
 const ApplicantsPage = () => {
-	const [currentOffset, setCurrentOffset] = useState(0);
-	const [size, setSize] = useState(1);
+	const currentOffset = 0;
+	const size = 20;
 
 	const list = queryApplications(currentOffset, size);
 

@@ -1,11 +1,12 @@
 import { ApplicationForm } from '../components';
 import { competenceMap } from '../utils/roles';
-import { useObject } from '../hooks';
+import { useObject, useTimedMessage } from '../hooks';
 import { useState } from 'react';
 import { mutateSubmission } from '../lib/reactQuery';
 
 const SubmissionPage = () => {
 	const submissionMutation = mutateSubmission();
+	const [message, showMessage, setMessage] = useTimedMessage(10000);
 
 	const competences = Object.values(competenceMap).map((e) =>
 		useObject({ ...e, checked: false, years_of_experience: '' })
@@ -31,16 +32,10 @@ const SubmissionPage = () => {
 		await submissionMutation
 			.mutateAsync(submission)
 			.then((data) => {
-				console.log(
-					`🚮 | file: SubmissionPage.jsx:18 | submissionMutation.mutateAsync | data:`,
-					data
-				);
+				setMessage('Sucessfully submitted application!');
 			})
 			.catch((err) => {
-				console.log(
-					`🚮 | file: SubmissionPage.jsx:20 | submissionMutation.mutateAsync | err:`,
-					err
-				);
+				setMessage('Failed to submit application');
 			});
 	};
 
@@ -60,6 +55,15 @@ const SubmissionPage = () => {
 				setAvailabilities={setAvailabilities}
 				handleSubmission={handleSubmission}
 			/>
+			{showMessage && (
+				<div
+					className={`text-center items-center border rounded-lg text-tc bg-primary-600 font-bold text-xl ${
+						submissionMutation?.isSuccess ? 'border-accept' : 'border-rose-900'
+					}`}
+				>
+					{message}
+				</div>
+			)}
 		</div>
 	);
 };

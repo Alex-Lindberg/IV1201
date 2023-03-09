@@ -38,9 +38,8 @@ export const mutateSubmission = () =>
 	});
 
 export const queryApplicant = (personId, isOpen) => {
-	const include = ['competence', 'availability'];
 	return useQuery({
-		queryKey: ['applicant', { personId: personId, include }],
+		queryKey: ['applicant', { personId: personId }],
 		queryFn: fetchApplicant,
 		enabled: isOpen,
 	});

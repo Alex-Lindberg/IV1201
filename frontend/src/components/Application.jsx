@@ -3,9 +3,7 @@ import { Fragment } from 'react';
 import { queryApplicant } from '../lib/reactQuery';
 
 const Application = ({ personId, reset, isOpen, setOpen }) => {
-	const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-	const applicant = queryApplicant(personId, isOpen);
-
+	const applicant = queryApplicant(personId, isOpen);	
 	return !applicant.data ? (
 		<div>Loading</div>
 	) : (
@@ -69,11 +67,10 @@ const Application = ({ personId, reset, isOpen, setOpen }) => {
 									{applicant?.data?.email}
 								</h4>
 								<Availability
-									availability={applicant?.data?.availability}
-									dateOptions={dateOptions}
+									availability={applicant?.data?.availabilities}
 								/>
 								<br className='border border-secondary-600 border-solid col-span-2 md:col-span-3' />
-								<Competences competence={applicant?.data?.competence} />
+								<Competences competences={applicant?.data?.competences} />
 								<div className='mt-4 row-start-5 md:col-span-3 col-span-2 flex justify-between items-center'>
 									<ApplicantStatus status={applicant?.data?.status} />
 									<button
@@ -113,13 +110,13 @@ const ApplicantStatus = ({ status }) => {
 			<span
 				className={`px-2 py-1 text-sm font-medium rounded-md border border-tc ${color}`}
 			>
-				{status ?? 'Unknown'}
+				{status ?? 'Unhandled'}
 			</span>
 		</div>
 	);
 };
 
-const Availability = ({ availability, dateOptions }) => (
+const Availability = ({ availability }) => (
 	<div
 		id='availability'
 		className='row-start-3 col-span-2 md:col-span-3 mt-2 text-sm text-primary-500
@@ -130,11 +127,11 @@ const Availability = ({ availability, dateOptions }) => (
 			return (
 				<div key={i}>
 					<span className='whitespace-nowrap'>
-						{new Date(dates?.from_date).toLocaleDateString('en', dateOptions)}
+						{new Date(dates?.from_date).toLocaleDateString('sv-SE')}
 					</span>
 					{' - '}
 					<span className='whitespace-nowrap'>
-						{new Date(dates?.to_date).toLocaleDateString('en', dateOptions)}
+						{new Date(dates?.to_date).toLocaleDateString('sv-SE')}
 					</span>
 				</div>
 			);
@@ -142,11 +139,10 @@ const Availability = ({ availability, dateOptions }) => (
 	</div>
 );
 
-const Competences = ({ competence }) => {
-	const arr = [competence].flat();
+const Competences = ({ competences }) => {
 	return (
 		<div
-			id='competence'
+			id='competences'
 			className='row-start-4 col-span-2 md:col-span-3 mt-2 text-sm text-primary-500 
 			border-t-2 border-t-primary-100 border-solid pt-3'
 		>
@@ -154,10 +150,10 @@ const Competences = ({ competence }) => {
 				<span className='font-semibold'>Competence</span>
 				<span>Experience (years)</span>
 			</div>
-			{arr.length !== 0 ? (
+			{competences.length === 0 ? (
 				<div>None</div>
 			) : (
-				arr.map((c, i) => {
+				competences.map((c, i) => {
 					return (
 						<div
 							key={i}

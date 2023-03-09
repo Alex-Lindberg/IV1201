@@ -8,7 +8,7 @@ export const login = async ({ username, password }) => {
 			password: password,
 		})
 		.then(({ data }) => {
-			console.log(`🚮 | file: auth.js:11 | .then | data:`, data);
+			data.session = data.session[0]
 			if (!!data?.session?.session_id && !!data?.user?.person_id) {
 				api.setUser(
 					data?.user?.person_id,
@@ -41,6 +41,7 @@ export const signup = async ({
 			password: password,
 		})
 		.then(({ data }) => {
+			data.session = data.session[0]
 			if (!!data?.session?.session_id && !!data?.user?.person_id) {
 				api.setUser(
 					data?.user?.person_id,
@@ -63,6 +64,7 @@ export const logout = async () => {
 			return data ?? true;
 		})
 		.catch(() => {
+			api.setUser(null, null, null);
 			return true;
 		});
 };
