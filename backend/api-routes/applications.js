@@ -1,26 +1,40 @@
 const auth = require('../middlewares/auth'),
-  applicantsMiddleware = require('../middlewares/applicants'),
+  applicationsMiddleware = require('../middlewares/applications'),
   responseMiddleware = require('../middlewares/response');
 
 module.exports = {
-  get: [
+  post: [
     auth.initLocals,
-    auth.authorize,
-    applicantsMiddleware.initLocals,
-    applicantsMiddleware.getAllApplicants,
-    responseMiddleware.sendResponse(200, 'applicants'),
+    // auth.authorize,
+    applicationsMiddleware.initLocals,
+    applicationsMiddleware.insertAvailabilities,
+    applicationsMiddleware.commitQueries,
+    responseMiddleware.sendResponse(201, 'application'),
   ],
 };
 
-module.exports.get.apiDoc = {
-  tags: ['applicants'],
+module.exports.post.apiDoc = {
+  tags: ['applications'],
+  description: 'Create a new application',
+
+  requestBody: {
+    description: 'Application object',
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/Application',
+        },
+      },
+    },
+  },
   responses: {
-    200: {
+    201: {
       description: 'Successfully fetched list of applicants',
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/SearchResults',
+            $ref: '#/components/schemas/Application',
           },
         },
       },
@@ -28,25 +42,10 @@ module.exports.get.apiDoc = {
   },
   parameters: [
     {
-      $ref: '#/components/parameters/size',
-    },
-    {
-      $ref: '#/components/parameters/offset',
-    },
-    {
-      $ref: '#/components/parameters/filterString',
-    },
-    {
-      $ref: '#/components/parameters/orderBy',
-    },
-    {
-      $ref: '#/components/parameters/filterBy',
-    },
-    {
       $ref: '#/components/parameters/personId',
     },
-    {
-      $ref: '#/components/parameters/sessionId',
-    },
+    // {
+    //   $ref: '#/components/parameters/sessionId',
+    // },
   ],
 };
