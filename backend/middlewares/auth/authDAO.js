@@ -1,9 +1,5 @@
-const { sendQuery } = require('../../utils/dbIntegration/dbConfig');
-
-const roleMap = {
-  recruiter: 1,
-  applicant: 2,
-};
+const { sendQuery } = require('../../utils/dbIntegration/dbConfig'),
+  { roleMap } = require('../../utils/maps');
 
 const createUser = async (applicant) => {
   const query = `INSERT INTO person (name, surname, pnr, email, username, password, role_id) VALUES ($1, $2, $3, $4, $5, crypt($6, 'password'), $7) RETURNING name, surname, pnr, email, username, role_id, person_id`;
@@ -30,6 +26,16 @@ const getUser = async (username, password = null) => {
   const queryParams = password ? [username, password] : [username];
   try {
     const result = await sendQuery(query, queryParams);
+    return result.rows;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getUserById = async (person_id) => {
+  const query = `SELECT person_id, name, surname, pnr, email, username, role_id FROM person WHERE person_id = $1`;
+  try {
+    const result = await sendQuery(query, [person_id]);
     return result.rows;
   } catch (err) {
     throw err;
@@ -106,5 +112,6 @@ module.exports = {
     checkIfUserExists,
     refreshSession,
     getRole,
+    getUserById,
   },
 };

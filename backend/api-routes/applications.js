@@ -1,11 +1,13 @@
 const auth = require('../middlewares/auth'),
   applicationsMiddleware = require('../middlewares/applications'),
-  responseMiddleware = require('../middlewares/response');
+  responseMiddleware = require('../middlewares/response'),
+  aclMiddleware = require('../middlewares/acl');
 
 module.exports = {
   post: [
     auth.initLocals,
     auth.authorize,
+    aclMiddleware.checkAcl,
     applicationsMiddleware.initLocals,
     applicationsMiddleware.insertApplication,
     responseMiddleware.sendResponse(201, 'application'),
