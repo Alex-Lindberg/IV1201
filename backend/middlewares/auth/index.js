@@ -35,8 +35,8 @@ const authorize = async (req, res, next) => {
       })
     );
   }
-
-  next();
+  await authDAO.refreshSession(res.locals.outData.session.person_id);
+  return next();
 };
 
 /**
@@ -47,10 +47,18 @@ const authorize = async (req, res, next) => {
  * @returns The user object is being returned.
  */
 const createUser = async (req, res, next) => {
+  if (res.locals.userExists) {
+    return next(
+      errorCodes.badRequest({
+        req,
+        message: 'User already exists',
+      })
+    );
+  }
   const data = req.body;
   try {
-    const result = await authDAO.createUser(data);
-    res.locals.outData.user = result;
+    res.locals.outData.user = await authDAO.createUser(data);
+    res.locals.userExists = true;
     next();
   } catch (err) {
     console.error('Error in createUser: ', err.message);
@@ -84,6 +92,7 @@ const getUser = async (req, res, next) => {
         })
       );
     }
+    res.locals.userExists = true;
     res.locals.outData.user = result[0];
     next();
   } catch (err) {
@@ -105,9 +114,9 @@ const getUser = async (req, res, next) => {
  * @returns The session object is being returned.
  */
 const getSession = async (req, res, next) => {
-  const { session_id, person_id } = req.headers;
+  const { session_id, person_id } = req.body ? req.body : req.headers;
   try {
-    const result = await authDAO.getSession(session_id, person_id);
+    const result = await authDAO.getSession(person_id, session_id);
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -119,7 +128,6 @@ const getSession = async (req, res, next) => {
     res.locals.outData.session = result[0];
     next();
   } catch (err) {
-    console.log('🚀 ~ file: index.js:87 ~ getSession ~ err:', err);
     console.error('Error in getSession: ', err.message);
     return next(errorCodes.serverError({ req, message: 'Could not get session' }));
   }
@@ -135,9 +143,17 @@ const getSession = async (req, res, next) => {
 const createSession = async (req, res, next) => {
   const { person_id } = res.locals.outData.user;
   try {
-    const result = await authDAO.createSession(person_id);
-    res.locals.outData.session = result;
-    next();
+    if (!!res.locals.userExists) {
+      res.locals.outData.session = await authDAO.getSession(person_id);
+      if (!!res.locals.outData.session && res.locals.outData.session.length > 0) {
+        await authDAO.refreshSession(person_id);
+        return next();
+      }
+      res.locals.outData.session = await authDAO.createSession(person_id);
+      return next();
+    } else {
+      throw new Error('User does not exist');
+    }
   } catch (err) {
     console.error('Error in createSession: ', err.message);
     return next(
@@ -182,9 +198,9 @@ const deleteSession = async (req, res, next) => {
  * @returns a function that is being used as middleware.
  */
 const checkIfSessionExists = async (req, res, next) => {
-  const { session_id, person_id } = req.headers;
+  const { session_id } = req.headers;
   try {
-    const result = await authDAO.getSession(session_id, person_id);
+    const result = await authDAO.getSession(session_id);
     if (result.length === 0) {
       return next(
         errorCodes.unauthorized({
@@ -193,10 +209,32 @@ const checkIfSessionExists = async (req, res, next) => {
         })
       );
     }
-    next();
+    res.locals.outData.session = result[0];
+    return next();
   } catch (err) {
     console.error('Error in checkIfSessionExists: ', err.message);
     return next(errorCodes.serverError({ req, message: 'Could not get session' }));
+  }
+};
+
+const checkIfUserExists = async (req, res, next) => {
+  const { username } = req.body || req.headers;
+  try {
+    res.locals.userExists = await authDAO.checkIfUserExists(username);
+    next();
+  } catch (err) {
+    console.error('Error in checkIfUserExists: ', err.message);
+  }
+};
+
+const getRole = async (req, res, next) => {
+  const { person_id } = req.body ? req.body : req.headers;
+  console.log('person_id: ', person_id);
+  try {
+    res.locals.outData.role = await authDAO.getRole(person_id);
+    next();
+  } catch (err) {
+    console.error('Error in getRole: ', err.message);
   }
 };
 
@@ -208,4 +246,7 @@ module.exports = {
   getUser,
   deleteSession,
   checkIfSessionExists,
+  checkIfUserExists,
+  getSession,
+  getRole,
 };

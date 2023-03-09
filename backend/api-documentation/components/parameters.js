@@ -23,7 +23,7 @@ module.exports = {
 	filterString: {
 		name: 'filterString',
 		in: 'query',
-		description: 'A string to filter the applicants by',
+		description: 'A string to filter the applicants by according to "filterBy" parameter',
 		schema: {
 			type: 'string',
 			example: 'John',
@@ -32,7 +32,7 @@ module.exports = {
 	orderBy: {
 		name: 'orderBy',
 		in: 'query',
-		description: 'A string to order the applicants by',
+		description: 'A string to order the applicants by defaults to "desc"',
 		schema: {
 			type: 'string',
 			enum: ['asc', 'desc'],
@@ -45,14 +45,14 @@ module.exports = {
 		description: 'A column name to filter the applicants by',
 		schema: {
 			type: 'string',
-			enum: ['name', 'surname', 'pnr', 'email', 'username'],
-			example: 'name',
+			enum: ['surname'],
+			example: 'surname',
 		},
 	},
 	offset: {
 		name: 'offset',
 		in: 'query',
-		description: 'The number of applicants to skip',
+		description: ' The number of applicants to skip ( 0 if not specified ) ',
 		schema: {
 			type: 'integer',
 			example: 0,
@@ -61,7 +61,7 @@ module.exports = {
 	size: {
 		name: 'size',
 		in: 'query',
-		description: 'The number of applicants to return',
+		description: 'The number of applicants to return ( All if not specified )',
 		schema: {
 			type: 'integer',
 			example: 25,

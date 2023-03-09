@@ -1,7 +1,4 @@
 const { sendQuery } = require('../../utils/dbIntegration/dbConfig');
-const {
-	applicantId,
-} = require('../../api-documentation/components/parameters');
 
 const roleMap = {
 	recruiter: 1,
@@ -9,21 +6,24 @@ const roleMap = {
 };
 
 const getApplicants = async (filterString, orderBy, filterBy, offset, size) => {
-	if (!!filterString) {
-	}
 
 	const query =
-		!!filterString && !!filterBy
-			? `
-	SELECT person_id, name, surname, pnr, email, username
-	 FROM person
-	 WHERE
-	   role_id = $1 AND
-      (${filterBy} LIKE '%' || $2 || '%' OR true)
-	   ORDER BY ${filterBy} ${orderBy}`
-			: `SELECT person_id, name, surname, pnr, email, username FROM person WHERE role_id = $1 ORDER BY person_id ${
-					orderBy ?? 'DESC'
-			  }`;
+		!!filterString && !!filterBy ?
+		`SELECT person_id, name, surname, pnr, email, username
+	 		FROM person
+	 		WHERE
+	   	role_id = $1 AND
+	   	surname LIKE '%' || $2 || '%'
+		  ORDER BY surname ${orderBy ? orderBy : 'DESC'}`
+			:
+			`
+		SELECT person_id, name, surname, pnr, email, username
+	 		FROM person
+	 		WHERE
+	   	role_id = $1
+	   	ORDER BY person_id ${orderBy ? orderBy : 'DESC'};
+			`
+
 	try {
 		const queryParameters =
 			!!filterString && !!filterBy

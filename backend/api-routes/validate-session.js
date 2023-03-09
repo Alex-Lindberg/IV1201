@@ -4,10 +4,9 @@ const auth = require('../middlewares/auth'),
 module.exports = {
   post: [
     auth.initLocals,
-    auth.checkIfUserExists,
-    auth.createUser,
-    auth.createSession,
-    responseMiddleware.sendResponse(201, 'outData'),
+    auth.authorize,
+    auth.getRole,
+    responseMiddleware.sendResponse(200, 'outData'),
   ],
 };
 
@@ -15,22 +14,22 @@ module.exports.post.apiDoc = {
   tags: ['auth'],
   requestBody: {
     required: true,
-    description: 'Sign up',
+    description: 'validate session',
     content: {
       'application/json': {
         schema: {
-          $ref: '#/components/schemas/SignUpData',
+          $ref: '#/components/schemas/SessionsValidation',
         },
       },
     },
   },
   responses: {
-    201: {
-      description: 'Successfully signed up',
+    200: {
+      description: 'Successfully validated session',
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/UserAndSession',
+            $ref: '#/components/schemas/SessionsValidationResponse',
           },
         },
       },

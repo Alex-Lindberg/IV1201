@@ -23,20 +23,26 @@ const createUser = async (applicant) => {
   }
 };
 
-const getUser = async (username, password) => {
-  const query = `SELECT person_id, name, surname, pnr, email, username, role_id FROM person WHERE username = $1 AND password = crypt($2, password)`;
+const getUser = async (username, password = null) => {
+  const query = password
+    ? `SELECT person_id, name, surname, pnr, email, username, role_id FROM person WHERE username = $1 AND password = crypt($2, password)`
+    : `SELECT person_id, name, surname, pnr, email, username, role_id FROM person WHERE username = $1`;
+  const queryParams = password ? [username, password] : [username];
   try {
-    const result = await sendQuery(query, [username, password]);
+    const result = await sendQuery(query, queryParams);
     return result.rows;
   } catch (err) {
     throw err;
   }
 };
 
-const getSession = async (session_id, person_id) => {
-  const query = `SELECT session_id, person_id, expiration_date FROM sessions WHERE session_id = $1 AND person_id = $2`;
+const getSession = async (person_id, session_id = null) => {
+  const queryParameters = session_id ? [person_id, session_id] : [person_id];
+  const query = session_id
+    ? `SELECT session_id, person_id, expiration_date FROM sessions WHERE person_id = $1 AND session_id = $2`
+    : `SELECT session_id, person_id, expiration_date FROM sessions WHERE person_id = $1`;
   try {
-    const result = await sendQuery(query, [session_id, person_id]);
+    const result = await sendQuery(query, queryParameters);
     return result.rows;
   } catch (err) {
     throw err;
@@ -61,6 +67,34 @@ const deleteSession = async (session_id) => {
     throw err;
   }
 };
+const checkIfUserExists = async (username) => {
+  const query = `SELECT person_id FROM person WHERE username = $1`;
+  try {
+    const result = await sendQuery(query, [username]);
+    return !!result.rows[0];
+  } catch (err) {
+    throw err;
+  }
+};
+
+const refreshSession = async (person_id) => {
+  const query = `UPDATE sessions SET expiration_date = NOW() + INTERVAL '30 day' WHERE person_id = $1`;
+  try {
+    await sendQuery(query, [person_id]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const getRole = async (person_id) => {
+  const query = `SELECT role_id FROM person WHERE person_id = $1`;
+  try {
+    const result = await sendQuery(query, [person_id]);
+    return result.rows[0];
+  } catch (err) {
+    throw err;
+  }
+};
 
 module.exports = {
   authDAO: {
@@ -69,5 +103,8 @@ module.exports = {
     getSession,
     getUser,
     deleteSession,
+    checkIfUserExists,
+    refreshSession,
+    getRole,
   },
 };
