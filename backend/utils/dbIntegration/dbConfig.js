@@ -17,11 +17,11 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-const encryptPasswords = async (client)=> {
+const encryptPasswords = async (client) => {
   client.query(
     `UPDATE public.person SET password = crypt('password', gen_salt('bf')) WHERE password IS NOT NULL`
   );
-}
+};
 
 const connect = async () => {
   client.connect();
@@ -59,14 +59,18 @@ const sendQuery = async (query, queryParameters) => {
     throw error;
   }
 };
+//queries is a list of objects with query and queryParameters
+//
 
-const sendCustomQuery = async (query, queryParameters) => {
-  let results = null;
+const sendCustomQuery = async (queries) => {
+  await client.query('BEGIN');
   try {
-    if (queryParameters) {
-      results = await client.query(query, queryParameters);
-      logChanges(query, queryParameters);
-    } else results = await client.query(query);
+    const results = Promise.all(
+      queries.map(async ({ query, queryParameters }) => {
+        return client.query(query, queryParameters);
+      })
+    );
+    client.query('COMMIT');
     return results;
   } catch (error) {
     client.query('ROLLBACK');
