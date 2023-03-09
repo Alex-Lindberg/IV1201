@@ -26,7 +26,7 @@ const initLocals = (req, res, next) => {
  * @returns A function that is used as middleware to check if the session has expired.
  */
 const authorize = async (req, res, next) => {
-  const { expiration_date } = res.locals.outData.session;
+  const { expiration_date } = res.locals.session;
   if (expiration_date < new Date()) {
     return next(
       errorCodes.unauthorized({
@@ -35,7 +35,7 @@ const authorize = async (req, res, next) => {
       })
     );
   }
-  await authDAO.refreshSession(res.locals.outData.session.person_id);
+  await authDAO.refreshSession(res.locals.session.person_id);
   return next();
 };
 
@@ -114,7 +114,7 @@ const getUser = async (req, res, next) => {
  * @returns The session object is being returned.
  */
 const getSession = async (req, res, next) => {
-  const { session_id, person_id } = req.body ? req.body : req.headers;
+  const { session_id, person_id } = req.headers;
   try {
     const result = await authDAO.getSession(person_id, session_id);
     if (result.length === 0) {
@@ -125,7 +125,7 @@ const getSession = async (req, res, next) => {
         })
       );
     }
-    res.locals.outData.session = result[0];
+    res.locals.session = result[0];
     next();
   } catch (err) {
     console.error('Error in getSession: ', err.message);
@@ -250,15 +250,48 @@ const getRole = async (req, res, next) => {
   }
 };
 
+/**
+ * It takes the person_id from the request headers, queries the database for the user with that
+ * person_id, and stores the user in res.locals.user
+ * @param req - The request object
+ * @param res - The response object
+ * @param next - This is a function that you call when you're done with your middleware.
+ * @returns The user object is being returned.
+ */
+const storeUser = async (req, res, next) => {
+  const { person_id } = req.headers;
+  try {
+    const user = await authDAO.getUserById(person_id);
+    if (user.length === 0) {
+      return next(
+        errorCodes.unauthorized({
+          req,
+          message: `User with person_id: ${person_id} not found`,
+        })
+      );
+    }
+    res.locals.user = user[0];
+    next();
+  } catch (err) {
+    console.error('Error in storeUser: ', err.message);
+
+    return next(
+      errorCodes.serverError({
+        req,
+        message: 'Could not store user',
+      })
+    );
+  }
+};
+
 module.exports = {
   initLocals,
-  authorize: [getSession, authorize],
+  authorize: [storeUser, getSession, authorize],
   createUser,
   createSession,
   getUser,
   deleteSession,
   checkIfSessionExists,
   checkIfUserExists,
-  getSession,
   getRole,
 };

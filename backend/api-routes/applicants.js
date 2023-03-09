@@ -1,11 +1,13 @@
 const auth = require('../middlewares/auth'),
   applicantsMiddleware = require('../middlewares/applicants'),
-  responseMiddleware = require('../middlewares/response');
+  responseMiddleware = require('../middlewares/response'),
+  aclMiddleware = require('../middlewares/acl');
 
 module.exports = {
   get: [
     auth.initLocals,
     auth.authorize,
+    aclMiddleware.checkAcl,
     applicantsMiddleware.initLocals,
     applicantsMiddleware.getAllApplicants,
     responseMiddleware.sendResponse(200, 'applicants'),
