@@ -217,6 +217,12 @@ const checkIfSessionExists = async (req, res, next) => {
   }
 };
 
+/**
+ * It checks if a user exists in the database
+ * @param req - The request object.
+ * @param res - the response object
+ * @param next - This is a function that is called when the middleware is complete.
+ */
 const checkIfUserExists = async (req, res, next) => {
   const { username } = req.body || req.headers;
   try {
@@ -227,6 +233,12 @@ const checkIfUserExists = async (req, res, next) => {
   }
 };
 
+/**
+ * This function gets the role of a user from the database
+ * @param req - the request object
+ * @param res - the response object
+ * @param next - This is a function that is called when the middleware is done.
+ */
 const getRole = async (req, res, next) => {
   const { person_id } = req.body ? req.body : req.headers;
   console.log('person_id: ', person_id);

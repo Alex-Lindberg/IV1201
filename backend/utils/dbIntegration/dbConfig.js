@@ -52,5 +52,19 @@ const sendQuery = async (query, queryParameters) => {
     throw error;
   }
 };
+//queries is a list of objects with query and queryParameters
+//
 
-module.exports = { sendQuery, connect };
+const sendSerializedQuery = async (query, queryParameters = null) => {
+  try {
+    if (!queryParameters) {
+      return await client.query(query);
+    }
+    return await client.query(query, queryParameters);
+  } catch (error) {
+    client.query('ROLLBACK');
+    throw error;
+  }
+};
+
+module.exports = { sendQuery, connect, sendSerializedQuery, client };

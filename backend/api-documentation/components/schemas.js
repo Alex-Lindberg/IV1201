@@ -60,10 +60,13 @@ module.exports = {
   Competence: {
     type: 'object',
     additionalProperties: false,
-    required: ['competence_id', 'name', 'years_of_experience'],
+    required: ['competence_id', 'years_of_experience'],
     properties: {
       competence_id: {
-        $ref: '#/components/schemas/GenericId',
+        type: 'integer',
+        example: 1,
+        minimum: 1,
+        maximum: 3,
       },
       name: {
         type: 'string',
@@ -76,6 +79,12 @@ module.exports = {
       },
     },
   },
+  ListOfCompetences: {
+    type: 'array',
+    items: {
+      $ref: '#/components/schemas/Competence',
+    },
+  },
   GenericDate: {
     type: 'string',
     format: 'date',
@@ -84,7 +93,7 @@ module.exports = {
   Availability: {
     type: 'object',
     additionalProperties: false,
-    required: ['availability_id', 'from_date', 'to_date'],
+    required: ['from_date', 'to_date'],
     properties: {
       availability_id: {
         $ref: '#/components/schemas/GenericId',
@@ -95,6 +104,12 @@ module.exports = {
       to_date: {
         $ref: '#/components/schemas/GenericDate',
       },
+    },
+  },
+  ListOfAvailabilities: {
+    type: 'array',
+    items: {
+      $ref: '#/components/schemas/Availability',
     },
   },
   Applicant: {
@@ -124,11 +139,11 @@ module.exports = {
         example: 'johndoe',
         nullable: true,
       },
-      competence: {
-        $ref: '#/components/schemas/Competence',
+      competences: {
+        $ref: '#/components/schemas/ListOfCompetences',
       },
-      availability: {
-        $ref: '#/components/schemas/Availability',
+      availabilities: {
+        $ref: '#/components/schemas/ListOfAvailabilities',
       },
     },
   },
@@ -278,6 +293,20 @@ module.exports = {
       },
       session: {
         $ref: '#/components/schemas/Session',
+      },
+    },
+  },
+
+  Application: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['competences', 'availabilities'],
+    properties: {
+      competences: {
+        $ref: '#/components/schemas/ListOfCompetences',
+      },
+      availabilities: {
+        $ref: '#/components/schemas/ListOfAvailabilities',
       },
     },
   },

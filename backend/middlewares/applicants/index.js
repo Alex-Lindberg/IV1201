@@ -27,26 +27,26 @@ const initLocals = (req, res, next) => {
  * @returns An array of applicants
  */
 const getAllApplicants = async (req, res, next) => {
-	const { filterString, orderBy, filterBy, offset, size } = req.query;
-	try {
-		res.locals.outData.applicants = await applicantsDAO.getApplicants(
-			filterString,
-			orderBy,
-			filterBy,
-			offset,
-			size
-		);
+  const { filterString, orderBy, filterBy, offset, size } = req.query;
+  try {
+    res.locals.outData.applicants = await applicantsDAO.getApplicants(
+      filterString,
+      orderBy,
+      filterBy,
+      offset,
+      size
+    );
 
-		next();
-	} catch (err) {
-		console.error('Error in getAllApplicants: ', err.message);
-		return next(
-			errorCodes.serverError({
-				req,
-				message: 'Could not fetch applicants',
-			})
-		);
-	}
+    next();
+  } catch (err) {
+    console.error('Error in getAllApplicants: ', err.message);
+    return next(
+      errorCodes.serverError({
+        req,
+        message: 'Could not fetch applicants',
+      })
+    );
+  }
 };
 
 /**
@@ -90,7 +90,7 @@ const getApplicant = async (req, res, next) => {
  */
 const getAvailabilityForApplicant = async (req, res, next) => {
   const include = req.query.include;
-  if (!include || !include.includes('availability')) {
+  if (!include || !include.includes('availabilities')) {
     return next();
   }
   const applicantId = req.params.applicantId;
@@ -100,18 +100,18 @@ const getAvailabilityForApplicant = async (req, res, next) => {
       return next(
         errorCodes.notFound({
           req,
-          message: `Applicant availability with person_id: ${applicantId}  not found`,
+          message: `Applicant availabilities with person_id: ${applicantId}  not found`,
         })
       );
     }
-    res.locals.outData.applicant.availability = result[0];
+    res.locals.outData.applicant.availabilities = result;
     next();
   } catch (err) {
     console.error('Error in getAvailabilityForApplicant: ', err.message);
     return next(
       errorCodes.serverError({
         req,
-        message: 'Could not fetch applicant availability',
+        message: 'Could not fetch applicant availabilities',
       })
     );
   }
@@ -126,7 +126,7 @@ const getAvailabilityForApplicant = async (req, res, next) => {
  */
 const getCompetenceForApplicant = async (req, res, next) => {
   const include = req.query.include;
-  if (!include || !include.includes('competence')) {
+  if (!include || !include.includes('competences')) {
     return next();
   }
   const applicantId = req.params.applicantId;
@@ -141,14 +141,14 @@ const getCompetenceForApplicant = async (req, res, next) => {
       );
     }
 
-    res.locals.outData.applicant.competence = result[0];
+    res.locals.outData.applicant.competences = result;
     next();
   } catch (err) {
     console.error('Error in getCompetenceForApplicant: ', err.message);
     return next(
       errorCodes.serverError({
         req,
-        message: 'Could not fetch applicant competence',
+        message: 'Could not fetch applicant competences',
       })
     );
   }
