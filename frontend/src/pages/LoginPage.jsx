@@ -1,33 +1,62 @@
 import { useState } from 'react';
-import LoginForm from '../components/LoginForm';
-import RegisterForm from '../components/RegisterForm';
+import { Loader, LoginForm, RegisterForm } from '../components';
+import { queryLogin } from '../lib/reactQuery';
+import { useAuth } from '../utils/AuthUtils';
 
 const LoginPage = () => {
+	const user = useAuth();
+	const login = queryLogin();
+
 	const [email, setEmail] = useState('');
+	const [username, setUsername] = useState('');
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [password, setPassword] = useState('');
 	const [passwordConfirm, setPasswordConfirm] = useState('');
+	const [error, setError] = useState('');
 
-	const handleSubmitLogin = () => {
-		console.log('Login');
+	const handleSubmitLogin = async () => {
+		if (!username || !password) return;
+		await login.mutateAsync({ username: username, password: password });
 	};
+
 	const handleSubmitRegister = () => {
 		console.log('Register');
 	};
 
-	return (
+	return login.isSuccess ? (
+		user.login(login.data)
+	) : (
 		<div className='bg-primary flex flex-col min-h-screen text-tc'>
+			{login.isLoading ? (
+				<>
+					<div
+						id='backdrop'
+						className='fixed inset-0 bg-primary-900 bg-opacity-40'
+					/>
+					<Loader />
+				</>
+			) : login.isError ? (
+				<>
+					<span className='md:mt-24'>
+						The server seems to have problems, Try reloading!
+					</span>
+					{login?.error?.message && <span>Error: {login.error.message}</span>}
+				</>
+			) : (
+				''
+			)}
+
 			<LoginForm
 				handleSubmitLogin={handleSubmitLogin}
-				email={email}
-				setEmail={setEmail}
+				username={username}
+				setUsername={setUsername}
 				password={password}
 				setPassword={setPassword}
 			/>
-            <div className='border-2 border-tc my-3'></div>
+			<div className='border-2 border-tc my-3'></div>
 			<RegisterForm
-                handleSubmitRegister={handleSubmitRegister}
+				handleSubmitRegister={handleSubmitRegister}
 				email={email}
 				setEmail={setEmail}
 				firstName={firstName}
@@ -38,7 +67,7 @@ const LoginPage = () => {
 				setPassword={setPassword}
 				passwordConfirm={passwordConfirm}
 				setPasswordConfirm={setPasswordConfirm}
-            />
+			/>
 		</div>
 	);
 };

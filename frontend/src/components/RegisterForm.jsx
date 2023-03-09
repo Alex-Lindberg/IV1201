@@ -1,9 +1,10 @@
-import Input from './input';
+import Input from './Input';
 
 const RegisterForm = (props) => {
 	return (
 		<form
 			onSubmit={(e) => {
+				e.preventDefault();
 				props.handleSubmitRegister(e);
 			}}
 		>
