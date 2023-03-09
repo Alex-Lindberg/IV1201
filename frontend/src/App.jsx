@@ -24,11 +24,20 @@ const router = createBrowserRouter(
 				<Route index element={<HomePage />} />
 				<Route path='/login' element={<LoginPage />} />
 			</Route>
-			<Route path='/app' element={<ProtectedLayout role={roleMap.recruiter} />}>
-				<Route path='applicants' element={<ApplicantsPage />} />
-			</Route>
-			<Route element={<ProtectedLayout role={roleMap.applicant} />}>
-				<Route path='form' element={<div>NOT IMPLEMENTED <LogoutButton /></div>} />
+			<Route path='/app'>
+				<Route element={<ProtectedLayout role={roleMap.recruiter} />}>
+					<Route path='applicants' element={<ApplicantsPage />} />
+				</Route>
+				<Route element={<ProtectedLayout role={roleMap.applicant} />}>
+					<Route
+						path='form'
+						element={
+							<div>
+								NOT IMPLEMENTED <LogoutButton />
+							</div>
+						}
+					/>
+				</Route>
 			</Route>
 		</Route>
 	)
