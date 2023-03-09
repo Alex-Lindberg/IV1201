@@ -23,9 +23,9 @@ export const fetchApplicant = async ({ queryKey }) => {
 	}
 };
 
-export const submitApplication = async () => {
+export const submitApplication = async (submission) => {
 	return api
-		.post(`${API_URL}/api/applications`)
+		.post(`${API_URL}/api/applications`, submission)
 		.then(({ data }) => {
 			
 			return data;

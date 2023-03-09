@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate, useOutlet } from 'react-router-dom';
+import { Navigate, useNavigate, useOutlet } from 'react-router-dom';
 import { useAuth } from '../utils/AuthUtils';
 import { roleMap } from '../utils/roles';
 
@@ -11,7 +11,6 @@ const HomeLayout = () => {
 		if (user.session.role_id === roleMap.recruiter) {
 			return <Navigate to='/app/applicants' replace />;
 		} else {
-			console.log('Route not implemented');
 			return <Navigate to='/app/form' replace />;
 		}
 	}

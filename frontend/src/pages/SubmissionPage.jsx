@@ -16,7 +16,16 @@ const SubmissionPage = () => {
 		e.preventDefault();
 		if (availabilities.length <= 0) return;
 		const submission = {
-			competences: competences.map((c) => c[0]),
+			competences: competences.reduce((acc, c, i) => {
+				if (c[0].checked) {
+					acc.push({
+						competence_id: parseInt(c[0].competence_id),
+						name: c[0].name,
+						years_of_experience: parseFloat(c[0].years_of_experience),
+					});
+				}
+				return acc;
+			}, []),
 			availabilities: availabilities,
 		};
 		await submissionMutation

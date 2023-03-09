@@ -14,13 +14,14 @@ const options = {
 	},
     defaultDate: new Date('2023-03-09'),
 	datepickerClassNames: 'top-10 block',
-	language: 'en',
+	language: 'sv',
 };
 
 const DateRangePicker = ({ className = '', setDate }) => {
 	const [show, setShow] = useState(false);
 	const handleChange = (selectedDate) => {
-		setDate(selectedDate);
+		console.log(selectedDate.toLocaleDateString("sv-SE"));
+		setDate(selectedDate.toLocaleDateString("sv-SE"));
 	};
 	const handleClose = (state) => {
 		setShow(state);

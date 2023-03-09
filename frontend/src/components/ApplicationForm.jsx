@@ -8,17 +8,18 @@ const ApplicationForm = ({
 	competences,
 	handleSubmission,
 }) => {
-	const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-	const [fromDate, setFromDate] = useState('');
-	const [toDate, setToDate] = useState('');
+	const [fromDate, setFromDate] = useState(undefined);
+	const [toDate, setToDate] = useState(undefined);
 
 	const removeAvailability = (index) => () => {
 		setAvailabilities(availabilities.filter((_, i) => index !== i));
 	};
 
 	const addNewDates = () => {
-		if (!!fromDate && !!toDate && fromDate.getTime() < toDate.getTime()) {
-			setAvailabilities([...availabilities, { from_date: fromDate, to_date: toDate }]);
+		if (!!fromDate && !!toDate) {
+			setAvailabilities([
+				...availabilities, { from_date: fromDate, to_date: toDate },
+			]);
 			setFromDate('');
 			setToDate('');
 		}
@@ -54,9 +55,11 @@ const ApplicationForm = ({
 					return (
 						<div key={i} className='flex flex-row max-w-lg mt-3'>
 							<div className='border-b border-primary-400 p-2 w-full grid grid-cols-3'>
-								<span>{av.from_date.toLocaleDateString('en', dateOptions)}</span>
+								<span>
+									{av.from_date}
+								</span>
 								<span className='px-3 text-center'>~</span>
-								<span>{av.to_date.toLocaleDateString('en', dateOptions)}</span>
+								<span>{av.to_date}</span>
 							</div>
 							<button
 								className='
