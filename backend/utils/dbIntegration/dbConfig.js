@@ -55,20 +55,16 @@ const sendQuery = async (query, queryParameters) => {
 //queries is a list of objects with query and queryParameters
 //
 
-const sendCustomQuery = async (queries) => {
-  await client.query('BEGIN');
+const sendSerializedQuery = async (query, queryParameters = null) => {
   try {
-    const results = Promise.all(
-      queries.map(async ({ query, queryParameters }) => {
-        return client.query(query, queryParameters);
-      })
-    );
-    client.query('COMMIT');
-    return results;
+    if (!queryParameters) {
+      return await client.query(query);
+    }
+    return await client.query(query, queryParameters);
   } catch (error) {
     client.query('ROLLBACK');
     throw error;
   }
 };
 
-module.exports = { sendQuery, connect, sendCustomQuery };
+module.exports = { sendQuery, connect, sendSerializedQuery, client };

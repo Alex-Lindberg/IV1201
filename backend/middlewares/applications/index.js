@@ -1,4 +1,5 @@
-const { applicationsDAO } = require('./applicationsDAO');
+const { errorCodes } = require('../errorcodes'),
+  { applicationsDAO } = require('./applicationsDAO');
 const initLocals = (req, res, next) => {
   res.locals = {
     ...res.locals,
@@ -14,12 +15,10 @@ const insertCompetenceProfiles = async (req, res, next) => {
   const { competences } = req.body;
   const { person_id } = req.headers;
   try {
-    await applicationsDAO.beginQuery();
     const results = await Promise.all(
       competences.map(async (competence) => {
         const result = await applicationsDAO.insertCompetenceProfile(competence, person_id);
-        console.log('🚀 ~ file: index.js:21 ~ competences.map ~ result:', result);
-        return { ...result, name: competence.name };
+        return result;
       })
     );
     res.locals.outData.application.competences = results;
@@ -35,7 +34,8 @@ const insertCompetenceProfiles = async (req, res, next) => {
   }
 };
 
-const prepareInsertAvailabilities = async (req, res, next) => {
+const insertAvailabilities = async (req, res, next) => {
+  console.log('🚀 ~ file: index.js:39 ~ insertAvailabilities ~ req.body:', req.body);
   const { availabilities } = req.body;
   const { person_id } = req.headers;
   try {
@@ -45,8 +45,11 @@ const prepareInsertAvailabilities = async (req, res, next) => {
         return result;
       })
     );
-    const test = await applicationsDAO.commitQuery();
     res.locals.outData.application.availabilities = results;
+    console.log(
+      '🚀 ~ file: index.js:49 ~ insertAvailabilities ~ res.locals.outData.application:',
+      res.locals.outData.application
+    );
     return next();
   } catch (err) {
     console.error('Error in insertAvailabilities: ', err.message);
@@ -59,10 +62,27 @@ const prepareInsertAvailabilities = async (req, res, next) => {
   }
 };
 
+const commitQueries = async (req, res, next) => {
+  try {
+    await applicationsDAO.commitQuery(res.locals.queries);
+    return next();
+  } catch (err) {
+    console.error('Error in commitQueries: ', err.message);
+    return next(
+      errorCodes.serverError({
+        req,
+        message: 'Could not commit queries',
+      })
+    );
+  }
+};
+
 // const
 
 module.exports = {
   initLocals,
   insertCompetenceProfiles,
+  // insertAvailabilities,
   insertAvailabilities,
+  commitQueries,
 };
