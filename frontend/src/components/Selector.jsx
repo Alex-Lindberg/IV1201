@@ -1,3 +1,11 @@
+
+/**
+ * Component for checkboxes with input text as secondary input.
+ * 
+ * @param {*} props Object containing property:
+ * - competenceHook: hook for setting competences 
+ * @returns The component
+ */
 const Selector = ({ competenceHook }) => {
 	const [competence, updateCompetence] = competenceHook;
 	return (

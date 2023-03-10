@@ -1,5 +1,13 @@
 import { useState } from 'react';
 
+/**
+ * Hook allowing easier access and control over data stored in
+ * the browsers localStorage.
+ * 
+ * @param {*} key The key to index into storage
+ * @param {*} fallback default value
+ * @returns {Array} Data and Setter function
+ */
 const useLocalStorage = (key, fallback) => {
 	const [storedValue, setStoredValue] = useState(() => {
 		const value = window.localStorage.getItem(key);

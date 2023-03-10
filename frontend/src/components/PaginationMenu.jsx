@@ -1,12 +1,20 @@
-import { useState } from 'react';
 
+/**
+ * 
+ * @param {*} props Object containing properties:
+ * - params: Pagination information
+ * - updateParams: setter for the params property
+ * - total: The total number of items
+ * - callNextPage: Function that calls the next page
+ * - callPrevPage: Function that calls the previous page
+ * @returns The component
+ */
 const PaginationMenu = ({
 	params,
 	updateParams,
 	total,
 	callNextPage,
-	callPrevPage,
-	handleSubmit,
+	callPrevPage
 }) => {
 	if (params.size <= 0) params.size = 1;
 	return (

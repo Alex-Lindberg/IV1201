@@ -1,5 +1,10 @@
 import { axios } from '../lib/axios';
 
+/**
+ * Object that contains functions that interact with the
+ * axios instance. Ensures the same axios instance is used
+ * when making requests along with valid headers.
+ */
 export const api = {
 	get: (url, params = {}, config = {}) =>
 		axios.get(url, {

@@ -5,6 +5,11 @@ import useTimedMessage from '../hooks/useTimedMessage';
 import { mutateLogin, mutateSignup } from '../lib/reactQuery';
 import { useAuth } from '../utils/AuthUtils';
 
+/**
+ * Page component that handles login and registrations.
+ * 
+ * @returns The page
+ */
 const LoginPage = () => {
 	const user = useAuth();
 	const loginMutation = mutateLogin();

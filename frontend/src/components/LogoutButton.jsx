@@ -2,6 +2,11 @@ import { Await } from 'react-router-dom';
 import { mutateLogout } from '../lib/reactQuery';
 import { useAuth } from '../utils/AuthUtils';
 
+/**
+ * Button component that triggers logout mutation call to the server.
+ * 
+ * @returns The component
+ */
 const LogoutButton = () => {
 
 	const user = useAuth();

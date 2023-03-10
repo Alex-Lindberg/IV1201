@@ -1,3 +1,8 @@
+
+/**
+ * Component to manage input field styling and to group label and input.
+ * @returns The component
+ */
 const Input = ({
 	onChange,
 	className = '',

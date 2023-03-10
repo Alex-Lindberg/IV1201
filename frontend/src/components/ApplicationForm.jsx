@@ -82,7 +82,10 @@ const ApplicationForm = ({
 			<button
 				className='border rounded-lg py-2 px-4 mt-5 max-w-lg w-full text-center
                     border-primary-300 hover:bg-primary-400'
-				onClick={() => addNewDates()}
+				onClick={(e) => {
+					e.preventDefault();
+					addNewDates()
+				}}
 			>
 				Add new date
 			</button>

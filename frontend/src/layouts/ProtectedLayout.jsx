@@ -3,6 +3,15 @@ import { Footer, Navbar } from '../components';
 import { api } from '../utils/api';
 import { useAuth } from '../utils/AuthUtils';
 
+/**
+ * Layour wrapper for protected routes. Validates the session and redirects
+ * unautorized / unauthenticated user sessions.
+ * 
+ * @param {Object} props An object with the following properties:
+ * 	- redirectPath: The path to redirect to
+ * 	- role: 		The authorization role
+ * @returns The layout wrapper
+ */
 const ProtectedLayout = ({ redirectPath = '/', role }) => {
 	const user = useAuth();
 

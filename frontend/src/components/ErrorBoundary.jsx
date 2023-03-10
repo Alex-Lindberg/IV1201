@@ -1,5 +1,8 @@
 import { useRouteError, useAsyncError, useNavigate } from 'react-router-dom';
 
+/**
+ * The error fallback component
+ */
 const ErrorBoundary = () => {
 	let error = useRouteError();
 	let asyncError = useAsyncError();

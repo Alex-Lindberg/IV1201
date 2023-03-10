@@ -1,6 +1,15 @@
 import React from 'react';
 import Input from './Input';
 
+/**
+ * Form for collecting login data
+ * 
+ * @param {*} handleSubmitLogin Submits the login request
+ * @param {*} username the username
+ * @param {*} setUsername sets the username
+ * @param {*} setPassword sets the password
+ * @returns the component
+ */
 const LoginForm = ({
 	handleSubmitLogin,
 	username,
