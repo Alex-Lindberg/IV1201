@@ -1,5 +1,10 @@
 import LogoutButton from './LogoutButton';
 
+/**
+ * Page header and navbar element for authenticated sessions.
+ * 
+ * @returns the component
+ */
 const Navbar = () => {
 	return (
 		<div

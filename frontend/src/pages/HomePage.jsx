@@ -1,5 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Ladning page for the app.
+ * 
+ * @returns The page
+ */
 const HomePage = () => {
 	const navigate = useNavigate();
 	return (

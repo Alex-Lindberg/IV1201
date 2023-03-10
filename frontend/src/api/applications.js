@@ -12,14 +12,15 @@ const defaultParams = {
 /**
  * It fetches a list of applicants from the backend API, and returns the data and the parameters used
  * to fetch the data
- * @param [offset=0] - The offset of the data to be fetched.
- * @param [params] - {
- * @returns An object with the following properties:
- * 	- count: number of applicants
- * 	- next: url to the next page of applicants
- * 	- previous: url to the previous page of applicants
- * 	- results: array of applicants
- * 	- params: the params used to fetch the applicants
+ * 
+ * @param [offset=0] The query pageParam that React query paginates with
+ * @param params An object with the following properties:
+ * 	- offset: 					The offset position in the applicants (person) table
+ * 	- size: 					the number of applicants to fetch
+ * 	- filterString: 			stirng to filter applicants by
+ * 	- [filterBy='surname']: 	The column to filter by
+ *  - [orderBy='asc']: 			The order of the applicants
+ * @returns The applicants data from the server along with the parameters used
  */
 export const fetchApplications = async (offset = 0, params = defaultParams) => {
 	return api

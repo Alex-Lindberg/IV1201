@@ -10,7 +10,7 @@ import {
 import { AuthLayout, HomeLayout, ProtectedLayout } from './layouts';
 import { ApplicantsPage, HomePage, LoginPage, SubmissionPage } from './pages';
 import { getUserData } from './utils/AuthUtils';
-import { ErrorBoundary, LogoutButton } from './components';
+import { ErrorBoundary } from './components';
 import { roleMap } from './utils/roles';
 
 const router = createBrowserRouter(

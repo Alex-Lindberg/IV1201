@@ -2,6 +2,11 @@ import { Navigate, useNavigate, useOutlet } from 'react-router-dom';
 import { useAuth } from '../utils/AuthUtils';
 import { roleMap } from '../utils/roles';
 
+/**
+ * Layout wrapper for the home page. Triggers re-directs for authenticated users.
+ * 
+ * @returns The layout wrapper
+ */
 const HomeLayout = () => {
 	const outlet = useOutlet();
 	const navigate = useNavigate();

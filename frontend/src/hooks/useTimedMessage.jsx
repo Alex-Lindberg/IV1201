@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * Hook that creates timed messages / events.
+ * 
+ * @param {*} timer The duration of the event
+ * @param {*} animationTime Additional time to account for animations to start/finish
+ * @returns {Array} The data, the active state and a a setter
+ */
 const useTimedMessage = (timer = 5000, animationTime = 0) => {
 	const [active, setActive] = useState(false);
 	const [message, setMessage] = useState('');

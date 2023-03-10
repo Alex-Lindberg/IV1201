@@ -4,6 +4,12 @@ import { useObject, useTimedMessage } from '../hooks';
 import { useState } from 'react';
 import { mutateSubmission } from '../lib/reactQuery';
 
+/**
+ * Page component that contains the form for submitting new
+ * applications.
+ * 
+ * @returns The page
+ */
 const SubmissionPage = () => {
 	const submissionMutation = mutateSubmission();
 	const [message, showMessage, setMessage] = useTimedMessage(10000);

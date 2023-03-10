@@ -1,3 +1,9 @@
+
+/**
+ * Page footer component.
+ * 
+ * @returns The component
+ */
 const Footer = () => {
 	return (
 		<div className="bg-primary-700 bottom-0 text-tc

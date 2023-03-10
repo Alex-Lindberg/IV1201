@@ -2,6 +2,14 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { queryApplicant } from '../lib/reactQuery';
 
+/**
+ * 
+ * @param {*} personId the id of the displayed applicant
+ * @param {*} reset the selected applicant
+ * @param {*} isOpen if the modal is open 
+ * @param {*} setOpen sets the open state  
+ * @returns 
+ */
 const Application = ({ personId, reset, isOpen, setOpen }) => {
 	const applicant = queryApplicant(personId, isOpen);	
 	return !applicant.data ? (

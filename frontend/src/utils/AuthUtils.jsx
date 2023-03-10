@@ -6,6 +6,12 @@ import { roleMap } from './roles';
 
 const AuthContext = createContext();
 
+/**
+ * Wraps child objects with a provider for authentication
+ * 
+ * @param {*} {children} Child components
+ * @returns The child components wrapped with the authentication context 
+ */
 export const AuthProvider = ({ children }) => {
 	const [session, setSession] = useLocalStorage('session', null);
 

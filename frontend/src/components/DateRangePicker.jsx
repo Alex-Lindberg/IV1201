@@ -17,6 +17,11 @@ const options = {
 	language: 'sv',
 };
 
+/**
+ * 
+ * @param {*} className styling for tailwind 
+ * @param {*} setDate sets the selected date
+ */
 const DateRangePicker = ({ className = '', setDate }) => {
 	const [show, setShow] = useState(false);
 	const handleChange = (selectedDate) => {

@@ -1,5 +1,26 @@
 import Input from './Input';
 
+/**
+ * Form for collecting signup data
+ * 
+ * @param {*} props Object containg registration properties passed from parent.
+ * - handleSubmitRegister:	Function to trigger registration
+ * - name:					The users name
+ * - setName:				Sets the name
+ * - surname:				The users family name
+ * - setSurname:			Sets the surname
+ * - pnr:					The users personal number
+ * - setPnr:				Sets pnr
+ * - email:					The users email address
+ * - setEmail:				Sets email 
+ * - username:				The username to use
+ * - setUsername:			Sets username 
+ * - password:				The password to use
+ * - setPassword:			Sets the password 
+ * - password2:				password confirmation
+ * - setPassword2:			Sets the password confirmation
+ * @returns The registration form component
+ */
 const RegisterForm = (props) => {
 	return (
 		<form

@@ -4,6 +4,12 @@ import { OpenIcon, Spinner } from '../assets';
 import { queryApplications } from '../lib/reactQuery';
 import { useObject } from '../hooks';
 
+/**
+ * Page component where applicants are listed, can be displayed and
+ * eventually managed.
+ * 
+ * @returns The page
+ */
 const ApplicantsPage = () => {
 	const currentOffset = 0;
 	const size = 20;
@@ -113,32 +119,6 @@ const ApplicantsPage = () => {
 					callPrevPage={list.fetchPreviousPage}
 					handleSubmit={(e) => e.preventDefault()}
 				/>
-				{/* <button
-					className='my-2 dark:bg-primary-700 dark:hover:bg-primary-600 
-					rounded-lg 
-					dark:text-tc dark:border-primary-500
-					focus:outline-none focus:ring-primary-100 max-w-sm
-					dark:focus:ring-primary-700 border-2 border-tc-700 px-5 py-1'
-					onClick={() => {
-						updateParams({offset: params.offset + params.size});
-						list.fetchNextPage
-					}}
-				>
-					Fetch more
-				</button>
-				<button
-					className='my-2 dark:bg-primary-700 dark:hover:bg-primary-600 
-					rounded-lg 
-					dark:text-tc dark:border-primary-500
-					focus:outline-none focus:ring-primary-100 max-w-sm
-					dark:focus:ring-primary-700 border-2 border-tc-700 px-5 py-1'
-					onClick={() => {
-						updateParams({offset: params.offset - params.size});
-						list.fetchPreviousPage
-					}}
-				>
-					Back
-				</button> */}
 			</div>
 			<div className='flex flex-1 flex-col text-tc mt-10'>
 				<Application
