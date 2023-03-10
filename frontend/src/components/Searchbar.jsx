@@ -1,6 +1,6 @@
 import { SortIcon, SearchIcon } from '../assets';
 
-const Searchbar = ({handleSubmit}) => {
+const Searchbar = ({params, updateParams, handleSubmit}) => {
 	return (
 		<form
 			className='flex flex-row items-center max-w-sm'
@@ -45,6 +45,8 @@ const Searchbar = ({handleSubmit}) => {
                             dark:placeholder-primary-400 dark:text-tc
                             dark:border-l-primary-700'
 						placeholder='Search'
+						value={params?.filterString ?? ''}
+						onChange={(e) => updateParams({filterString: e.target.value})}
 						required
 					/>
 					{/* <span

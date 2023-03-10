@@ -57,7 +57,7 @@ const SubmissionPage = () => {
 			/>
 			{showMessage && (
 				<div
-					className={`text-center items-center border rounded-lg text-tc bg-primary-600 font-bold text-xl ${
+					className={`text-center items-center border rounded-lg mt-6 text-tc bg-primary-600 font-bold text-xl ${
 						submissionMutation?.isSuccess ? 'border-accept' : 'border-rose-900'
 					}`}
 				>

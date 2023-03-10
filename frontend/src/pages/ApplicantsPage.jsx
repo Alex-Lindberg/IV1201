@@ -99,8 +99,10 @@ const ApplicantsPage = () => {
 					applications.
 				</p>
 				<Searchbar
+					params={params}
+					updateParams={updateParams}
 					handleSubmit={() => {
-						console.log(applicant);
+						console.log("updated params", params?.filterString);
 					}}
 				/>
 				<PaginationMenu

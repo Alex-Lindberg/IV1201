@@ -26,7 +26,7 @@ const ApplicationForm = ({
 	};
 
 	return (
-		<form onSubmit={handleSubmission}>
+		<form>
 			<h1 className='text-secondary font-bold text-xl pt-6'>
 				Previous Experience
 			</h1>
