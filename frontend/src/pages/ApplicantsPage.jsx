@@ -2,12 +2,21 @@ import { useState } from 'react';
 import { Application, PaginationMenu, Searchbar } from '../components';
 import { OpenIcon, Spinner } from '../assets';
 import { queryApplications } from '../lib/reactQuery';
+import { useObject } from '../hooks';
 
 const ApplicantsPage = () => {
 	const currentOffset = 0;
 	const size = 20;
 
-	const list = queryApplications(currentOffset, size);
+	const [params, updateParams] = useObject({
+		offset: currentOffset,
+		size: size,
+		filterString: '',
+		filterBy: 'surname',
+		orderBy: 'asc',
+	});
+
+	const list = queryApplications(params);
 
 	const [applicant, setApplicant] = useState(null);
 	const [isOpen, setOpen] = useState(false);
@@ -95,12 +104,39 @@ const ApplicantsPage = () => {
 					}}
 				/>
 				<PaginationMenu
-					offset={currentOffset}
-					size={size}
-					total={891}
+					params={params}
+					updateParams={updateParams}
+					total={list?.data?.pages?.[0]?.total_count ?? 0}
 					callNextPage={list.fetchNextPage}
 					callPrevPage={list.fetchPreviousPage}
+					handleSubmit={(e) => e.preventDefault()}
 				/>
+				{/* <button
+					className='my-2 dark:bg-primary-700 dark:hover:bg-primary-600 
+					rounded-lg 
+					dark:text-tc dark:border-primary-500
+					focus:outline-none focus:ring-primary-100 max-w-sm
+					dark:focus:ring-primary-700 border-2 border-tc-700 px-5 py-1'
+					onClick={() => {
+						updateParams({offset: params.offset + params.size});
+						list.fetchNextPage
+					}}
+				>
+					Fetch more
+				</button>
+				<button
+					className='my-2 dark:bg-primary-700 dark:hover:bg-primary-600 
+					rounded-lg 
+					dark:text-tc dark:border-primary-500
+					focus:outline-none focus:ring-primary-100 max-w-sm
+					dark:focus:ring-primary-700 border-2 border-tc-700 px-5 py-1'
+					onClick={() => {
+						updateParams({offset: params.offset - params.size});
+						list.fetchPreviousPage
+					}}
+				>
+					Back
+				</button> */}
 			</div>
 			<div className='flex flex-1 flex-col text-tc mt-10'>
 				<Application

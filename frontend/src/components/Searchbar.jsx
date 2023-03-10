@@ -3,7 +3,7 @@ import { SortIcon, SearchIcon } from '../assets';
 const Searchbar = ({handleSubmit}) => {
 	return (
 		<form
-			className='flex flex-row items-center'
+			className='flex flex-row items-center max-w-sm'
 			onSubmit={(e) => {
 				e.preventDefault();
 				handleSubmit(e.target.value);

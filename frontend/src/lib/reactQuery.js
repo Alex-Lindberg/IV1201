@@ -53,24 +53,16 @@ export const queryApplicant = (personId, isOpen) => {
  * @returns A list of objects including applications,
  * 	the offset used, the size used and total count of items
  */
-export const queryApplications = (offset = 0, size = 10) =>
+export const queryApplications = (params) =>
 	useInfiniteQuery({
-		queryKey: ['applicants', { size: size }],
-		queryFn: ({ pageParam = 0 }) => fetchApplications(pageParam, size),
+		queryKey: ['applicants', { params: params }],
+		queryFn: ({ pageParam = 0 }) => fetchApplications(pageParam, params),
 		keepPreviousData: true,
-		getNextPageParam: (lastPage) => {
-			const { offset, size, total_count } = lastPage ?? {
-				offset: offset,
-				size: size,
-				total_count: 0,
+		getNextPageParam: (lastPage, allPages) => {
+			const { size } = lastPage ?? {
+				size: 20,
 			};
-			return Math.min(offset + size, total_count - 1);
-		},
-		getPreviousPageParam: (_, pages) => {
-			const { offset, size } = pages[pages?.length - 1] ?? {
-				offset: 0,
-				size: 10,
-			};
-			return Math.max(offset - size, 0);
+			const nexPage = (allPages?.length ?? 0) * size;
+			return nexPage;
 		},
 	});
